@@ -1,184 +1,310 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>K Browser</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Birthday Magical Surprise ✨</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+    
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-    body {
-      background-color: #202124;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      padding: 20px;
-    }
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #030108; font-family: 'Poppins', sans-serif; color: #fff; }
 
-    /* Browser Window Frame */
-    .browser-container {
-      width: 100%;
-      max-width: 1000px;
-      height: 600px;
-      background: #292a2d;
-      border-radius: 10px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
+        /* UI Overlay for Link Generation */
+        #creator-ui {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 100; background: radial-gradient(circle, #2d0b3f 0%, #030108 100%);
+        }
 
-    /* Tab Bar */
-    .tab-bar {
-      display: flex;
-      background-color: #1f1f1f;
-      padding: 8px 8px 0 8px;
-      gap: 5px;
-    }
+        .glass-box {
+            background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px);
+            padding: 35px 25px; border-radius: 24px; border: 1.5px solid rgba(255, 215, 0, 0.5);
+            text-align: center; width: 90%; max-width: 420px;
+            box-shadow: 0 0 50px rgba(255, 0, 127, 0.4);
+        }
 
-    .tab {
-      background: #292a2d;
-      color: #e8eaed;
-      padding: 8px 16px;
-      border-radius: 8px 8px 0 0;
-      font-size: 13px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      max-width: 180px;
-    }
+        .glass-box h2 { 
+            font-family: 'Cinzel Decorative', cursive; color: #ffd700; margin-bottom: 20px; font-size: 1.6rem;
+            text-shadow: 0 0 10px rgba(255,215,0,0.6);
+        }
+        
+        .glass-box input {
+            width: 100%; padding: 14px; border-radius: 30px; border: 2px solid #ff007f;
+            background: rgba(0,0,0,0.7); color: #fff; font-size: 1.1rem; text-align: center; outline: none; margin-bottom: 20px;
+        }
 
-    .tab.active {
-      background: #35363a;
-    }
+        .btn {
+            background: linear-gradient(45deg, #ff007f, #ff7700, #ffd700);
+            color: #fff; border: none; padding: 13px 30px; font-size: 1rem; font-weight: 700;
+            border-radius: 30px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.5);
+        }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 215, 0, 0.9); }
 
-    /* Navigation / Toolbar */
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background-color: #35363a;
-      padding: 8px 12px;
-    }
+        #link-result { margin-top: 20px; display: none; }
+        #generated-url { width: 100%; padding: 10px; background: #11081f; border: 1px solid #00ffcc; color: #00ffcc; border-radius: 10px; margin-bottom: 10px; font-size: 0.85rem; word-break: break-all; }
 
-    .nav-btn {
-      background: transparent;
-      border: none;
-      color: #e8eaed;
-      font-size: 16px;
-      cursor: pointer;
-      padding: 6px;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        /* 3D Viewport */
+        #webgl-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
+        
+        #music-prompt {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            z-index: 50; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); 
+            padding: 10px 25px; border-radius: 30px; border: 1px solid #ffd700; 
+            font-size: 0.85rem; font-weight: 600; color: #ffd700;
+            letter-spacing: 1px; animation: pulse 1.5s infinite alternate;
+            display: none; pointer-events: none; text-align: center;
+        }
 
-    .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    /* Address / Search Bar */
-    .address-bar {
-      flex: 1;
-      background: #202124;
-      border: 1px solid #5f6368;
-      border-radius: 20px;
-      padding: 6px 16px;
-      color: #fff;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .address-bar:focus {
-      border-color: #8ab4f8;
-    }
-
-    /* Web View Container */
-    .content-area {
-      flex: 1;
-      background: #fff;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-  </style>
+        @keyframes pulse { 0% { opacity: 0.6; transform: translateX(-50%) scale(0.95); } 100% { opacity: 1; transform: translateX(-50%) scale(1.05); } }
+    </style>
 </head>
 <body>
 
-  <div class="browser-container">
-    <!-- Tabs Header -->
-    <div class="tab-bar">
-      <div class="tab active">
-        <span>K Browser Home</span>
-      </div>
+    <!-- Link Generator UI -->
+    <div id="creator-ui">
+        <div class="glass-box">
+            <h2>Birthday Wish Generator 🎉</h2>
+            <input type="text" id="name-input" placeholder="Enter Name..." />
+            <button class="btn" onclick="generateLink()">Create Magic Link 🚀</button>
+
+            <div id="link-result">
+                <input type="text" id="generated-url" readonly />
+                <button class="btn" onclick="copyLink()">Copy Magic Link 📋</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Navigation Bar -->
-    <div class="toolbar">
-      <button class="nav-btn" id="back-btn" title="Back"></button>
-      <button class="nav-btn" id="forward-btn" title="Forward"></button>
-      <button class="nav-btn" id="reload-btn" title="Reload"></button>
-      <input type="text" id="url-bar" class="address-bar" value="https://bing.com">
-      <button class="nav-btn" id="go-btn" title="Go"></button>
-    </div>
+    <div id="music-prompt">✨ TAP ANYWHERE FOR ROCKET BLASTS ✨</div>
+    <div id="webgl-container"></div>
 
-    <!-- Web Content View -->
-    <div class="content-area">
-      <iframe id="web-view" src="https://bing.com"></iframe>
-    </div>
-  </div>
+    <script>
+        let scene, camera, renderer, textMesh, particleSystem;
+        let rockets = [], explosionParticles = [];
+        let nameParam = new URLSearchParams(window.location.search).get('name');
 
-  <!-- JavaScript Logic -->
-  <script>
-    const urlBar = document.getElementById('url-bar');
-    const webView = document.getElementById('web-view');
-    const goBtn = document.getElementById('go-btn');
-    const reloadBtn = document.getElementById('reload-btn');
-
-    // Navigation Function
-    function loadUrl() {
-      let url = urlBar.value.trim();
-
-      // Check if user entered URL or Search Term
-      if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        if (url.includes('.') && !url.includes(' ')) {
-          url = 'https://' + url;
-        } else {
-          // Search query via Bing/Google
-          url = 'https://www.bing.com/search?q=' + encodeURIComponent(url);
+        if (nameParam) {
+            document.getElementById('creator-ui').style.display = 'none';
+            document.getElementById('music-prompt').style.display = 'block';
+            init3DScene(decodeURIComponent(nameParam));
         }
-      }
 
-      urlBar.value = url;
-      webView.src = url;
-    }
+        function generateLink() {
+            let name = document.getElementById('name-input').value.trim();
+            if(!name) { alert("Please enter a name!"); return; }
+            
+            let baseUrl = window.location.href.split('?')[0];
+            let shareableUrl = `${baseUrl}?name=${encodeURIComponent(name)}`;
+            
+            document.getElementById('generated-url').value = shareableUrl;
+            document.getElementById('link-result').style.display = 'block';
+        }
 
-    // Event Listeners
-    goBtn.addEventListener('click', loadUrl);
+        function copyLink() {
+            let copyText = document.getElementById('generated-url');
+            copyText.select();
+            document.execCommand("copy");
+            alert("Magic Link Copied! Share it with the Birthday Person 🎉");
+        }
 
-    urlBar.addEventListener('keypress', (event) => {
-      if (event.key === 'Enter') {
-        loadUrl();
-      }
-    });
+        // --- DYNAMIC TEXT TEXTURE CREATOR ---
+        function createTextTexture(text) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
 
-    reloadBtn.addEventListener('click', () => {
-      webView.src = webView.src;
-    });
-  </script>
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // Glow Background Effect
+            ctx.shadowColor = '#ff007f';
+            ctx.shadowBlur = 30;
+
+            // Line 1: HAPPY BIRTHDAY
+            ctx.font = '900 52px "Poppins", sans-serif';
+            ctx.fillStyle = '#ffd700';
+            ctx.textAlign = 'center';
+            ctx.fillText("HAPPY BIRTHDAY", canvas.width / 2, 180);
+
+            // Line 2: NAME (Super Glowing Neon)
+            ctx.shadowColor = '#00ffff';
+            ctx.shadowBlur = 40;
+            ctx.font = '900 78px "Poppins", sans-serif';
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(text.toUpperCase(), canvas.width / 2, 310);
+
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        // --- 3D ENGINE ---
+        function init3DScene(targetName) {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x030108, 0.015);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 35);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            document.getElementById('webgl-container').appendChild(renderer.domElement);
+
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+            scene.add(ambientLight);
+
+            // Background Starfield
+            createStarfield();
+
+            // 3D Animated Text Plane
+            const texture = createTextTexture(targetName);
+            const planeGeo = new THREE.PlaneGeometry(30, 15);
+            const planeMat = new THREE.MeshBasicMaterial({
+                map: texture,
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+
+            textMesh = new THREE.Mesh(planeGeo, planeMat);
+            textMesh.position.z = -40; // Entrance Animation
+            scene.add(textMesh);
+
+            // Launch Rocket Fireworks Loop
+            setInterval(launch3DRocket, 500);
+
+            window.addEventListener('click', () => {
+                document.getElementById('music-prompt').style.display = 'none';
+                for(let i=0; i<6; i++) launch3DRocket();
+            });
+
+            animate();
+        }
+
+        function createStarfield() {
+            const count = 4000;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(count * 3);
+
+            for (let i = 0; i < count * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 300;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const material = new THREE.PointsMaterial({ size: 0.9, color: 0xffffff, transparent: true, opacity: 0.8 });
+            particleSystem = new THREE.Points(geometry, material);
+            scene.add(particleSystem);
+        }
+
+        // Diwali 3D Rockets
+        function launch3DRocket() {
+            const geometry = new THREE.CylinderGeometry(0.1, 0.25, 2, 8);
+            const material = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
+            const rocket = new THREE.Mesh(geometry, material);
+
+            rocket.position.set((Math.random() - 0.5) * 60, -30, (Math.random() - 0.5) * 30);
+            rocket.velocity = 0.8 + Math.random() * 0.7;
+            
+            scene.add(rocket);
+            rockets.push(rocket);
+        }
+
+        // Rocket Explosion FX
+        function createExplosion(x, y, z) {
+            const particleCount = 70;
+            const geo = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const velocities = [];
+
+            const colors = [0xffd700, 0xff007f, 0x00ffff, 0xff3300, 0xffffff];
+            const colorHex = colors[Math.floor(Math.random() * colors.length)];
+
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = x;
+                positions[i * 3 + 1] = y;
+                positions[i * 3 + 2] = z;
+
+                velocities.push({
+                    x: (Math.random() - 0.5) * 1.2,
+                    y: (Math.random() - 0.5) * 1.2,
+                    z: (Math.random() - 0.5) * 1.2
+                });
+            }
+
+            geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const mat = new THREE.PointsMaterial({ size: 1.3, color: colorHex, transparent: true, opacity: 1 });
+            const pSystem = new THREE.Points(geo, mat);
+
+            scene.add(pSystem);
+            explosionParticles.push({ system: pSystem, velocities: velocities, life: 1.0 });
+        }
+
+        // Animation Loop
+        let clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            let time = clock.getElapsedTime();
+
+            // Text Cinematic Motion
+            if (textMesh) {
+                if (textMesh.position.z < 0) textMesh.position.z += 0.4; // Smooth Zoom-In
+                
+                // Continuous Floating & Tilting Wave
+                textMesh.position.y = Math.sin(time * 2) * 1.5;
+                textMesh.rotation.y = Math.sin(time * 1.2) * 0.2;
+                textMesh.rotation.x = Math.cos(time * 1.5) * 0.1;
+            }
+
+            if (particleSystem) particleSystem.rotation.y = time * 0.02;
+
+            // Rocket Movement
+            for (let i = rockets.length - 1; i >= 0; i--) {
+                let r = rockets[i];
+                r.position.y += r.velocity;
+
+                if (r.position.y > (5 + Math.random() * 15)) {
+                    createExplosion(r.position.x, r.position.y, r.position.z);
+                    scene.remove(r);
+                    rockets.splice(i, 1);
+                }
+            }
+
+            // Explosion Particles
+            for (let i = explosionParticles.length - 1; i >= 0; i--) {
+                let exp = explosionParticles[i];
+                let positions = exp.system.geometry.attributes.position.array;
+
+                for (let j = 0; j < exp.velocities.length; j++) {
+                    positions[j * 3] += exp.velocities[j].x;
+                    positions[j * 3 + 1] += exp.velocities[j].y;
+                    positions[j * 3 + 2] += exp.velocities[j].z;
+                }
+
+                exp.system.geometry.attributes.position.needsUpdate = true;
+                exp.life -= 0.025;
+                exp.system.material.opacity = exp.life;
+
+                if (exp.life <= 0) {
+                    scene.remove(exp.system);
+                    explosionParticles.splice(i, 1);
+                }
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            if (camera && renderer) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        });
+    </script>
 </body>
 </html>
