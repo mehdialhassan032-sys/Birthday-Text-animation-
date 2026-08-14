@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grand Royal Cosmic Birthday 🎉</title>
+    <title>Grand Assam Mountain & River Cosmic Birthday 🎉</title>
     
-    <!-- Google Fonts for Bold Royal & Modern Cyber Typography -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Montserrat:wght@900&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { 
             width: 100%; height: 100%; overflow: hidden; 
-            background: #030008; font-family: 'Montserrat', sans-serif; 
+            background: #020005; font-family: 'Montserrat', sans-serif; 
             color: #fff; 
         }
 
-        /* Fullscreen Interactive Canvas */
-        #fxCanvas { position: fixed; inset: 0; z-index: 1; }
+        /* Fullscreen Canvas for Assam Landscape, River, Stars & Massive Rocket Bombs */
+        #sceneCanvas { position: fixed; inset: 0; z-index: 1; }
 
         /* Creator Glassmorphism Screen */
         .creator-screen {
@@ -58,92 +58,84 @@
 
         /* Main Wish Stage Overlay */
         #wish-stage {
-            position: absolute; top: 48%; left: 50%; transform: translate(-50%, -50%);
+            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
             z-index: 10; text-align: center; width: 95%; pointer-events: none; display: none;
         }
 
         .word-container { opacity: 0; animation-fill-mode: forwards !important; margin: 4px 0; }
 
-        /* --- ROYAL METALLIC & NEON HYBRID TYPOGRAPHY --- */
+        /* --- GRAND TYPOGRAPHY & GLOW --- */
         .text-happy {
             font-family: 'Cinzel Decorative', cursive;
-            font-size: clamp(2.8rem, 10vw, 5.5rem);
+            font-size: clamp(2.5rem, 9vw, 5rem);
             font-weight: 900; letter-spacing: 6px;
             background: linear-gradient(180deg, #ffffff 0%, #ffe600 45%, #ff8c00 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.85)) drop-shadow(0 8px 15px rgba(0,0,0,0.9));
+            filter: drop-shadow(0 0 35px rgba(255, 215, 0, 0.9));
         }
 
         .text-birthday {
             font-family: 'Cinzel Decorative', cursive;
-            font-size: clamp(2.8rem, 10vw, 5.5rem);
+            font-size: clamp(2.5rem, 9vw, 5rem);
             font-weight: 900; letter-spacing: 6px;
             background: linear-gradient(180deg, #ffffff 0%, #ff007f 50%, #9900e6 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 25px rgba(255, 0, 127, 0.85)) drop-shadow(0 8px 15px rgba(0,0,0,0.9));
+            filter: drop-shadow(0 0 35px rgba(255, 0, 127, 0.9));
         }
 
         .text-name {
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(3.8rem, 14vw, 7.5rem);
+            font-size: clamp(3.5rem, 12vw, 7rem);
             font-weight: 900; letter-spacing: 8px; margin-top: 8px; text-transform: uppercase;
             background: linear-gradient(180deg, #ffffff 0%, #00f2fe 45%, #0066ff 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 35px rgba(0, 242, 254, 0.95)) drop-shadow(0 10px 20px rgba(0,0,0,0.95));
+            filter: drop-shadow(0 0 45px rgba(0, 242, 254, 1));
         }
 
-        .ornament { 
-            color: #ffd700; font-size: 1.6rem; margin: 2px 0; 
-            text-shadow: 0 0 15px #ffd700, 0 0 30px #ffaa00; 
-            font-family: 'Cinzel Decorative', cursive;
+        .ornament { color: #ffd700; font-size: 1.5rem; margin: 2px 0; text-shadow: 0 0 15px #ffd700; font-family: 'Cinzel Decorative', cursive; }
+
+        /* --- TEXT ANIMATION: SLOW, BLUR-TO-CLEAR, ROTATE, & BOOSTER GLOW --- */
+        .blur-rotate-fly-1 { animation: blurRotateIn 2.5s cubic-bezier(0.15, 0.85, 0.35, 1.2) forwards; }
+        .blur-rotate-fly-2 { animation: blurRotateIn 2.8s cubic-bezier(0.15, 0.85, 0.35, 1.2) forwards; }
+        .blur-rotate-fly-3 { animation: blurRotateIn 3.2s cubic-bezier(0.15, 0.85, 0.35, 1.2) forwards; }
+
+        @keyframes blurRotateIn {
+            0% {
+                opacity: 0;
+                filter: blur(25px) drop-shadow(0 0 50px currentColor);
+                transform: translateY(120px) rotate(-180deg) scale(0.2);
+            }
+            60% {
+                opacity: 0.8;
+                filter: blur(8px) drop-shadow(0 0 30px currentColor);
+                transform: translateY(-20px) rotate(15deg) scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0px) drop-shadow(0 0 20px currentColor);
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
         }
 
-        /* Entrance Flying Animations */
-        .fly-left { animation: flyLeft 1.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .fly-right { animation: flyRight 1.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        .fly-up { animation: flyUp 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
-
-        @keyframes flyLeft {
-            0% { opacity: 0; transform: translateX(-120vw) rotate(-30deg) scale(0.2); }
-            100% { opacity: 1; transform: translateX(0) rotate(0deg) scale(1); }
-        }
-        @keyframes flyRight {
-            0% { opacity: 0; transform: translateX(120vw) rotate(30deg) scale(0.2); }
-            100% { opacity: 1; transform: translateX(0) rotate(0deg) scale(1); }
-        }
-        @keyframes flyUp {
-            0% { opacity: 0; transform: translateY(100vh) scale(0.1); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* Permanent Alive Breathing Motion (Text Hata Nahi Rahega) */
-        .alive-1 { opacity: 1 !important; animation: aliveWave1 4s ease-in-out infinite alternate !important; }
-        .alive-2 { opacity: 1 !important; animation: aliveWave2 4.5s ease-in-out infinite alternate !important; }
-        .alive-3 { opacity: 1 !important; animation: aliveWave3 3.8s ease-in-out infinite alternate !important; }
+        /* Forever Alive Breathing Float (Never Disappears) */
+        .alive-float-1 { opacity: 1 !important; animation: aliveWave1 4s ease-in-out infinite alternate !important; }
+        .alive-float-2 { opacity: 1 !important; animation: aliveWave2 4.5s ease-in-out infinite alternate !important; }
+        .alive-float-3 { opacity: 1 !important; animation: aliveWave3 3.8s ease-in-out infinite alternate !important; }
 
         @keyframes aliveWave1 {
-            0% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-15px) scale(1.02); }
-            100% { transform: translateY(5px) scale(0.99); }
+            0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 20px #ffaa00); }
+            50% { transform: translateY(-12px) scale(1.02); filter: drop-shadow(0 0 35px #ffaa00); }
+            100% { transform: translateY(4px) scale(0.99); filter: drop-shadow(0 0 20px #ffaa00); }
         }
         @keyframes aliveWave2 {
-            0% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(15px) scale(1.03); }
-            100% { transform: translateY(-8px) scale(0.98); }
+            0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 20px #ff007f); }
+            50% { transform: translateY(12px) scale(1.03); filter: drop-shadow(0 0 35px #ff007f); }
+            100% { transform: translateY(-8px) scale(0.98); filter: drop-shadow(0 0 20px #ff007f); }
         }
         @keyframes aliveWave3 {
-            0% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-18px) scale(1.04); }
-            100% { transform: translateY(0px) scale(1); }
-        }
-
-        /* Ground Mirror Reflection */
-        #stage-reflection {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 28vh;
-            background: linear-gradient(to top, rgba(3, 0, 8, 0.95) 0%, transparent 100%);
-            border-top: 1.5px solid rgba(255, 215, 0, 0.25);
-            box-shadow: 0 -25px 80px rgba(186, 85, 211, 0.2) inset;
-            pointer-events: none; z-index: 5;
+            0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 25px #00f2fe); }
+            50% { transform: translateY(-15px) scale(1.04); filter: drop-shadow(0 0 45px #00f2fe); }
+            100% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 25px #00f2fe); }
         }
     </style>
 </head>
@@ -152,7 +144,7 @@
     <!-- Link Generator UI -->
     <div class="creator-screen" id="creator-ui">
         <div class="glass-box">
-            <h2>✨ Grand Royal Birthday</h2>
+            <h2>✨ Assam Mountain Cosmic Wish</h2>
             <input type="text" id="name-input" placeholder="Enter Name Here..." />
             <button onclick="generateLink()">Create Magic Link 🚀</button>
 
@@ -182,12 +174,11 @@
         <div class="ornament" id="orn2" style="opacity:0; font-size:1.2rem; margin-top:-5px;">༺ 👑 ༻</div>
     </div>
 
-    <div id="stage-reflection"></div>
-
-    <canvas id="fxCanvas"></canvas>
+    <!-- Master Interactive Scene Canvas -->
+    <canvas id="sceneCanvas"></canvas>
 
     <script>
-        const canvas = document.getElementById('fxCanvas');
+        const canvas = document.getElementById('sceneCanvas');
         const ctx = canvas.getContext('2d');
 
         function resize() {
@@ -206,8 +197,8 @@
                 document.getElementById('wish-stage').style.display = 'block';
                 document.getElementById('name-display').innerText = decodeURIComponent(nameParam);
                 
-                startFlyingSequence();
-                startMasterEngine();
+                startEntranceSequence();
+                startAssamLandscapeEngine();
             }
         });
 
@@ -227,48 +218,40 @@
             alert("Magic Link Copied! Share with the Birthday Person 🎉");
         }
 
-        // Entrance Flying Sequence -> Shift to Permanent Alive Floating
-        function startFlyingSequence() {
+        // Slow Entrance with Blur, Rotation & Booster Glow -> Switch to Alive Floating
+        function startEntranceSequence() {
             const w1 = document.getElementById('w1');
             const w2 = document.getElementById('w2');
             const w3 = document.getElementById('w3');
             const orn1 = document.getElementById('orn1');
             const orn2 = document.getElementById('orn2');
 
-            setTimeout(() => { w1.classList.add('fly-left'); }, 300);
+            setTimeout(() => { w1.classList.add('blur-rotate-fly-1'); }, 300);
+            setTimeout(() => { w2.classList.add('blur-rotate-fly-2'); orn1.style.opacity = '1'; }, 1200);
+            setTimeout(() => { w3.classList.add('blur-rotate-fly-3'); orn2.style.opacity = '1'; }, 2100);
 
-            setTimeout(() => { 
-                w2.classList.add('fly-right'); 
-                orn1.style.opacity = '1';
-            }, 1000);
-
-            setTimeout(() => { 
-                w3.classList.add('fly-up'); 
-                orn2.style.opacity = '1';
-            }, 1800);
-
-            // Forever Alive Transition (Text stays permanently)
+            // Forever Alive Transition (Text stays permanently active)
             setTimeout(() => {
-                w1.className = 'word-container alive-1';
-                w2.className = 'word-container alive-2';
-                w3.className = 'word-container alive-3';
-            }, 3000);
+                w1.className = 'word-container alive-float-1';
+                w2.className = 'word-container alive-float-2';
+                w3.className = 'word-container alive-float-3';
+            }, 4000);
         }
 
-        // --- MASTER ENGINE: GALAXY NEBULA + MASSIVE ROCKET BOMBS + STAR BURSTS ---
-        function startMasterEngine() {
+        // --- ASSAM LANDSCAPE ENGINE: STARS, MOUNTAINS, RIVER & MASSIVE ROCKET BOMBS ---
+        function startAssamLandscapeEngine() {
             let rockets = [];
             let particles = [];
-            let textStars = [];
-            let spaceStars = [];
+            let stars = [];
+            let riverWaveOffset = 0;
 
-            // Background Deep Cosmic Stars
-            for(let i=0; i<150; i++) {
-                spaceStars.push({
+            // Twinkling Stars in the Sky
+            for(let i=0; i<180; i++) {
+                stars.push({
                     x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2 + 0.5,
-                    speed: Math.random() * 0.4 + 0.1,
+                    y: Math.random() * (canvas.height * 0.6),
+                    size: Math.random() * 2.2 + 0.5,
+                    speed: Math.random() * 0.3 + 0.1,
                     alpha: Math.random()
                 });
             }
@@ -278,41 +261,42 @@
                 constructor() {
                     this.x = Math.random() * (canvas.width * 0.8) + (canvas.width * 0.1);
                     this.y = canvas.height + 20;
-                    this.targetY = Math.random() * (canvas.height * 0.45) + 40;
-                    this.speed = Math.random() * 4 + 9;
-                    this.size = Math.random() * 3 + 4; // Bada Rocket Head
-                    const colorPalette = ['#ffd700', '#ff007f', '#00f2fe', '#ff5500', '#a855f7', '#00ffaa'];
-                    this.color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+                    this.targetY = Math.random() * (canvas.height * 0.35) + 50;
+                    this.speed = Math.random() * 4 + 10;
+                    this.size = Math.random() * 3 + 5;
+                    const colors = ['#ffd700', '#ff007f', '#00f2fe', '#ff5500', '#a855f7', '#00ffaa'];
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
                     this.trail = [];
                 }
                 update() {
-                    this.trail.push({ x: this.x, y: this.y, alpha: 1 });
-                    if(this.trail.length > 15) this.trail.shift();
-
+                    this.trail.push({ x: this.x, y: this.y });
+                    if(this.trail.length > 18) this.trail.shift();
                     this.y -= this.speed;
 
                     if (this.y <= this.targetY) {
-                        triggerGrandExplosion(this.x, this.y, this.color);
+                        triggerMassiveExplosion(this.x, this.y, this.color);
                         return false;
                     }
                     return true;
                 }
                 draw() {
-                    // Rocket Trail Sparks
+                    // Booster-like glowing trail
                     this.trail.forEach((t, index) => {
                         ctx.save();
-                        ctx.globalAlpha = (index / this.trail.length) * 0.8;
+                        ctx.globalAlpha = (index / this.trail.length) * 0.9;
                         ctx.fillStyle = this.color;
+                        ctx.shadowColor = this.color;
+                        ctx.shadowBlur = 15;
                         ctx.beginPath();
                         ctx.arc(t.x, t.y, this.size * (index / this.trail.length), 0, Math.PI * 2);
                         ctx.fill();
                         ctx.restore();
                     });
 
-                    // Massive Head
+                    // Rocket Tip
                     ctx.save();
-                    ctx.shadowColor = this.color;
-                    ctx.shadowBlur = 20;
+                    ctx.shadowColor = '#ffffff';
+                    ctx.shadowBlur = 25;
                     ctx.fillStyle = '#ffffff';
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -321,18 +305,18 @@
                 }
             }
 
-            // GRAND FIREWORK EXPLOSION PARTICLES (Double Ring Burst)
+            // MASSIVE GRAND EXPLOSION PARTICLES
             class ExplosionParticle {
-                constructor(x, y, color, isInnerRing = false) {
+                constructor(x, y, color, isCore = false) {
                     this.x = x; this.y = y; this.color = color;
                     const angle = Math.random() * Math.PI * 2;
-                    const speed = isInnerRing ? (Math.random() * 4 + 1) : (Math.random() * 10 + 3);
+                    const speed = isCore ? (Math.random() * 5 + 1) : (Math.random() * 12 + 4);
                     this.vx = Math.cos(angle) * speed;
                     this.vy = Math.sin(angle) * speed;
                     this.alpha = 1;
-                    this.decay = Math.random() * 0.015 + 0.008;
-                    this.gravity = 0.06;
-                    this.size = Math.random() * 3 + 1.5;
+                    this.decay = Math.random() * 0.012 + 0.006;
+                    this.gravity = 0.05;
+                    this.size = Math.random() * 3.5 + 1.5;
                 }
                 update() {
                     this.x += this.vx;
@@ -347,7 +331,7 @@
                     ctx.save();
                     ctx.globalAlpha = this.alpha;
                     ctx.shadowColor = this.color;
-                    ctx.shadowBlur = 10;
+                    ctx.shadowBlur = 15;
                     ctx.fillStyle = this.color;
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -356,78 +340,97 @@
                 }
             }
 
-            // CONTINUOUS STAR DUST EMITTING FROM TEXT
-            class TextStarEmitter {
-                constructor() {
-                    const bounds = document.getElementById('wish-stage').getBoundingClientRect();
-                    this.x = bounds.left + Math.random() * bounds.width;
-                    this.y = bounds.top + Math.random() * bounds.height;
-                    this.size = Math.random() * 3.5 + 1.5;
-                    this.vx = (Math.random() - 0.5) * 2;
-                    this.vy = (Math.random() - 0.5) * 2 - 1;
-                    this.alpha = 1;
-                    this.color = Math.random() > 0.5 ? '#ffd700' : '#00f2fe';
-                }
-                update() {
-                    this.x += this.vx; this.y += this.vy;
-                    this.alpha -= 0.012;
-                    return this.alpha > 0;
-                }
-                draw() {
-                    ctx.save();
-                    ctx.globalAlpha = this.alpha;
-                    ctx.fillStyle = this.color;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.restore();
-                }
-            }
-
-            function triggerGrandExplosion(x, y, color) {
-                // Outer Heavy Burst
-                for (let i = 0; i < 90; i++) {
+            function triggerMassiveExplosion(x, y, color) {
+                for (let i = 0; i < 110; i++) {
                     particles.push(new ExplosionParticle(x, y, color, false));
                 }
-                // Inner White Glow Core Burst
-                for (let i = 0; i < 40; i++) {
+                for (let i = 0; i < 50; i++) {
                     particles.push(new ExplosionParticle(x, y, '#ffffff', true));
                 }
             }
 
-            // Launch Massive Rocket Bombs at regular interval
-            setInterval(() => { 
-                rockets.push(new MassiveRocket()); 
-            }, 320);
+            // Continuous Rocket Bombs Launch
+            setInterval(() => { rockets.push(new MassiveRocket()); }, 260);
 
-            // Continuously emit stars around text
-            setInterval(() => {
-                if(document.getElementById('wish-stage').style.display === 'block') {
-                    for(let i=0; i<4; i++) textStars.push(new TextStarEmitter());
-                }
-            }, 90);
+            // Draw Assam Style Distant Mountains
+            function drawMountains() {
+                // Background Mountain Range 1
+                ctx.fillStyle = '#0b041a';
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height * 0.65);
+                ctx.lineTo(canvas.width * 0.15, canvas.height * 0.50);
+                ctx.lineTo(canvas.width * 0.35, canvas.height * 0.62);
+                ctx.lineTo(canvas.width * 0.60, canvas.height * 0.45);
+                ctx.lineTo(canvas.width * 0.85, canvas.height * 0.60);
+                ctx.lineTo(canvas.width, canvas.height * 0.52);
+                ctx.lineTo(canvas.width, canvas.height * 0.75);
+                ctx.lineTo(0, canvas.height * 0.75);
+                ctx.closePath();
+                ctx.fill();
 
-            function mainLoop() {
-                requestAnimationFrame(mainLoop);
+                // Foreground Mountain Range 2
+                ctx.fillStyle = '#060210';
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height * 0.72);
+                ctx.lineTo(canvas.width * 0.25, canvas.height * 0.58);
+                ctx.lineTo(canvas.width * 0.50, canvas.height * 0.70);
+                ctx.lineTo(canvas.width * 0.75, canvas.height * 0.55);
+                ctx.lineTo(canvas.width, canvas.height * 0.68);
+                ctx.lineTo(canvas.width, canvas.height * 0.80);
+                ctx.lineTo(0, canvas.height * 0.80);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            // Draw Flowing River at the Bottom
+            function drawRiver() {
+                riverWaveOffset += 0.03;
+                let riverGrad = ctx.createLinearGradient(0, canvas.height * 0.78, 0, canvas.height);
+                riverGrad.addColorStop(0, '#001a33');
+                riverGrad.addColorStop(0.5, '#000f22');
+                riverGrad.addColorStop(1, '#000511');
                 
-                // Cosmic Trail Clear Effect
-                ctx.fillStyle = 'rgba(3, 0, 8, 0.2)';
+                ctx.fillStyle = riverGrad;
+                ctx.fillRect(0, canvas.height * 0.78, canvas.width, canvas.height * 0.22);
+
+                // Water shimmering flow lines
+                ctx.strokeStyle = 'rgba(0, 242, 254, 0.35)';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < 6; i++) {
+                    ctx.beginPath();
+                    let yPos = canvas.height * 0.82 + i * (canvas.height * 0.03);
+                    for (let x = 0; x < canvas.width; x += 30) {
+                        let waveY = yPos + Math.sin(x * 0.02 + riverWaveOffset + i) * 4;
+                        if (x === 0) ctx.moveTo(x, waveY);
+                        else ctx.lineTo(x, waveY);
+                    }
+                    ctx.stroke();
+                }
+            }
+
+            function loop() {
+                requestAnimationFrame(loop);
+                
+                ctx.fillStyle = 'rgba(2, 0, 5, 0.25)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Draw Space Cosmic Background Stars
-                spaceStars.forEach(s => {
+                // Draw Stars
+                stars.forEach(s => {
                     s.y -= s.speed;
-                    if(s.y < 0) s.y = canvas.height;
+                    if(s.y < 0) s.y = canvas.height * 0.6;
                     ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(Math.sin(Date.now()*0.002 + s.x))})`;
                     ctx.fillRect(s.x, s.y, s.size, s.size);
                 });
 
-                // Update & Render Rockets, Fireworks, Stars
+                // Draw Landscape
+                drawMountains();
+                drawRiver();
+
+                // Update & Render Rockets and Explosions
                 rockets = rockets.filter(r => { r.draw(); return r.update(); });
                 particles = particles.filter(p => { p.draw(); return p.update(); });
-                textStars = textStars.filter(s => { s.draw(); return s.update(); });
             }
-            mainLoop();
+            loop();
         }
     </script>
 </body>
