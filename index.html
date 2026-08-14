@@ -3,28 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Birthday Magical Surprise ✨</title>
+    <title>Magical Birthday Surprise 🎉</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
-    
-    <!-- Three.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Fredoka+One&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background: #030108; font-family: 'Poppins', sans-serif; color: #fff; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #05020a; font-family: 'Poppins', sans-serif; color: #fff; }
 
-        /* UI Overlay for Link Generation */
+        /* Generator UI Overlay */
         #creator-ui {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 100; background: radial-gradient(circle, #2d0b3f 0%, #030108 100%);
+            z-index: 100; background: radial-gradient(circle, #2d0b3f 0%, #05020a 100%);
         }
 
         .glass-box {
             background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(20px);
             padding: 35px 25px; border-radius: 24px; border: 1.5px solid rgba(255, 215, 0, 0.5);
-            text-align: center; width: 90%; max-width: 420px;
+            text-align: center; width: 90%; max-width: 400px;
             box-shadow: 0 0 50px rgba(255, 0, 127, 0.4);
         }
 
@@ -49,24 +47,78 @@
         #link-result { margin-top: 20px; display: none; }
         #generated-url { width: 100%; padding: 10px; background: #11081f; border: 1px solid #00ffcc; color: #00ffcc; border-radius: 10px; margin-bottom: 10px; font-size: 0.85rem; word-break: break-all; }
 
-        /* 3D Viewport */
-        #webgl-container { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1; }
-        
-        #music-prompt {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            z-index: 50; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); 
-            padding: 10px 25px; border-radius: 30px; border: 1px solid #ffd700; 
-            font-size: 0.85rem; font-weight: 600; color: #ffd700;
-            letter-spacing: 1px; animation: pulse 1.5s infinite alternate;
-            display: none; pointer-events: none; text-align: center;
+        /* Animation Canvas & Container */
+        #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        canvas { display: block; width: 100%; height: 100%; }
+
+        /* Animated Glowing Text Container */
+        #wish-container {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 10; text-align: center; width: 90%; pointer-events: none;
+            display: none;
         }
 
-        @keyframes pulse { 0% { opacity: 0.6; transform: translateX(-50%) scale(0.95); } 100% { opacity: 1; transform: translateX(-50%) scale(1.05); } }
+        .animated-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(2.2rem, 8vw, 4.5rem);
+            background: linear-gradient(45deg, #ffd700, #ff7700, #ff007f, #00ffff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientMove 3s infinite alternate, floatWave 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 0, 127, 0.6);
+            letter-spacing: 2px;
+        }
+
+        .animated-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(3rem, 12vw, 6rem);
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px #00ffff,
+                0 0 20px #00ffff,
+                0 0 40px #ff007f,
+                0 0 80px #ff007f;
+            animation: pulseGlow 1.8s infinite alternate, floatWave 3.5s ease-in-out infinite 0.5s;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Continuous Animations */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @keyframes floatWave {
+            0% { transform: translateY(0px) rotate(0deg) scale(1); }
+            50% { transform: translateY(-20px) rotate(2deg) scale(1.03); }
+            100% { transform: translateY(0px) rotate(-2deg) scale(1); }
+        }
+
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #ff007f; }
+            100% { text-shadow: 0 0 20px #ffd700, 0 0 40px #ff007f, 0 0 90px #ff007f; }
+        }
+
+        /* Tap Prompt */
+        #music-prompt {
+            position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%);
+            z-index: 50; background: rgba(255,255,255,0.12); backdrop-filter: blur(10px); 
+            padding: 12px 25px; border-radius: 30px; border: 1px solid #ffd700; 
+            font-size: 0.85rem; font-weight: 700; color: #ffd700;
+            letter-spacing: 1px; animation: pulseBtn 1.2s infinite alternate;
+            display: none; text-align: center; cursor: pointer;
+        }
+
+        @keyframes pulseBtn {
+            0% { opacity: 0.7; transform: translateX(-50%) scale(0.95); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Link Generator UI -->
     <div id="creator-ui">
         <div class="glass-box">
             <h2>Birthday Wish Generator 🎉</h2>
@@ -80,18 +132,26 @@
         </div>
     </div>
 
-    <div id="music-prompt">✨ TAP ANYWHERE FOR ROCKET BLASTS ✨</div>
-    <div id="webgl-container"></div>
+    <div id="wish-container">
+        <div class="animated-title">HAPPY BIRTHDAY</div>
+        <div class="animated-name" id="display-name">NAME</div>
+    </div>
+
+    <div id="music-prompt">✨ TAP ANYWHERE FOR FIREWORKS ✨</div>
+    
+    <div id="canvas-container">
+        <canvas id="fireworksCanvas"></canvas>
+    </div>
 
     <script>
-        let scene, camera, renderer, textMesh, particleSystem;
-        let rockets = [], explosionParticles = [];
-        let nameParam = new URLSearchParams(window.location.search).get('name');
+        const nameParam = new URLSearchParams(window.location.search).get('name');
 
         if (nameParam) {
             document.getElementById('creator-ui').style.display = 'none';
+            document.getElementById('wish-container').style.display = 'block';
             document.getElementById('music-prompt').style.display = 'block';
-            init3DScene(decodeURIComponent(nameParam));
+            document.getElementById('display-name').innerText = decodeURIComponent(nameParam);
+            initFireworks();
         }
 
         function generateLink() {
@@ -112,199 +172,61 @@
             alert("Magic Link Copied! Share it with the Birthday Person 🎉");
         }
 
-        // --- DYNAMIC TEXT TEXTURE CREATOR ---
-        function createTextTexture(text) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 1024;
-            canvas.height = 512;
+        // --- ULTRA SMOOTH 2D CANVAS FIREWORKS & ROCKET SYSTEM ---
+        function initFireworks() {
+            const canvas = document.getElementById('fireworksCanvas');
             const ctx = canvas.getContext('2d');
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Glow Background Effect
-            ctx.shadowColor = '#ff007f';
-            ctx.shadowBlur = 30;
-
-            // Line 1: HAPPY BIRTHDAY
-            ctx.font = '900 52px "Poppins", sans-serif';
-            ctx.fillStyle = '#ffd700';
-            ctx.textAlign = 'center';
-            ctx.fillText("HAPPY BIRTHDAY", canvas.width / 2, 180);
-
-            // Line 2: NAME (Super Glowing Neon)
-            ctx.shadowColor = '#00ffff';
-            ctx.shadowBlur = 40;
-            ctx.font = '900 78px "Poppins", sans-serif';
-            ctx.fillStyle = '#ffffff';
-            ctx.fillText(text.toUpperCase(), canvas.width / 2, 310);
-
-            return new THREE.CanvasTexture(canvas);
-        }
-
-        // --- 3D ENGINE ---
-        function init3DScene(targetName) {
-            scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x030108, 0.015);
-
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 0, 35);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            document.getElementById('webgl-container').appendChild(renderer.domElement);
-
-            // Lights
-            const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-            scene.add(ambientLight);
-
-            // Background Starfield
-            createStarfield();
-
-            // 3D Animated Text Plane
-            const texture = createTextTexture(targetName);
-            const planeGeo = new THREE.PlaneGeometry(30, 15);
-            const planeMat = new THREE.MeshBasicMaterial({
-                map: texture,
-                transparent: true,
-                side: THREE.DoubleSide
-            });
-
-            textMesh = new THREE.Mesh(planeGeo, planeMat);
-            textMesh.position.z = -40; // Entrance Animation
-            scene.add(textMesh);
-
-            // Launch Rocket Fireworks Loop
-            setInterval(launch3DRocket, 500);
-
-            window.addEventListener('click', () => {
-                document.getElementById('music-prompt').style.display = 'none';
-                for(let i=0; i<6; i++) launch3DRocket();
-            });
-
-            animate();
-        }
-
-        function createStarfield() {
-            const count = 4000;
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(count * 3);
-
-            for (let i = 0; i < count * 3; i++) {
-                positions[i] = (Math.random() - 0.5) * 300;
-            }
-
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const material = new THREE.PointsMaterial({ size: 0.9, color: 0xffffff, transparent: true, opacity: 0.8 });
-            particleSystem = new THREE.Points(geometry, material);
-            scene.add(particleSystem);
-        }
-
-        // Diwali 3D Rockets
-        function launch3DRocket() {
-            const geometry = new THREE.CylinderGeometry(0.1, 0.25, 2, 8);
-            const material = new THREE.MeshBasicMaterial({ color: 0xffaa00 });
-            const rocket = new THREE.Mesh(geometry, material);
-
-            rocket.position.set((Math.random() - 0.5) * 60, -30, (Math.random() - 0.5) * 30);
-            rocket.velocity = 0.8 + Math.random() * 0.7;
             
-            scene.add(rocket);
-            rockets.push(rocket);
-        }
-
-        // Rocket Explosion FX
-        function createExplosion(x, y, z) {
-            const particleCount = 70;
-            const geo = new THREE.BufferGeometry();
-            const positions = new Float32Array(particleCount * 3);
-            const velocities = [];
-
-            const colors = [0xffd700, 0xff007f, 0x00ffff, 0xff3300, 0xffffff];
-            const colorHex = colors[Math.floor(Math.random() * colors.length)];
-
-            for (let i = 0; i < particleCount; i++) {
-                positions[i * 3] = x;
-                positions[i * 3 + 1] = y;
-                positions[i * 3 + 2] = z;
-
-                velocities.push({
-                    x: (Math.random() - 0.5) * 1.2,
-                    y: (Math.random() - 0.5) * 1.2,
-                    z: (Math.random() - 0.5) * 1.2
-                });
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
+            resize();
+            window.addEventListener('resize', resize);
 
-            geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const mat = new THREE.PointsMaterial({ size: 1.3, color: colorHex, transparent: true, opacity: 1 });
-            const pSystem = new THREE.Points(geo, mat);
+            let particles = [];
+            let rockets = [];
 
-            scene.add(pSystem);
-            explosionParticles.push({ system: pSystem, velocities: velocities, life: 1.0 });
-        }
-
-        // Animation Loop
-        let clock = new THREE.Clock();
-
-        function animate() {
-            requestAnimationFrame(animate);
-            let time = clock.getElapsedTime();
-
-            // Text Cinematic Motion
-            if (textMesh) {
-                if (textMesh.position.z < 0) textMesh.position.z += 0.4; // Smooth Zoom-In
-                
-                // Continuous Floating & Tilting Wave
-                textMesh.position.y = Math.sin(time * 2) * 1.5;
-                textMesh.rotation.y = Math.sin(time * 1.2) * 0.2;
-                textMesh.rotation.x = Math.cos(time * 1.5) * 0.1;
-            }
-
-            if (particleSystem) particleSystem.rotation.y = time * 0.02;
-
-            // Rocket Movement
-            for (let i = rockets.length - 1; i >= 0; i--) {
-                let r = rockets[i];
-                r.position.y += r.velocity;
-
-                if (r.position.y > (5 + Math.random() * 15)) {
-                    createExplosion(r.position.x, r.position.y, r.position.z);
-                    scene.remove(r);
-                    rockets.splice(i, 1);
+            class Rocket {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height;
+                    this.targetY = Math.random() * (canvas.height * 0.5) + 50;
+                    this.speed = Math.random() * 4 + 7;
+                    this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                }
+                update() {
+                    this.y -= this.speed;
+                    if (this.y <= this.targetY) {
+                        createExplosion(this.x, this.y, this.color);
+                        return false;
+                    }
+                    return true;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
                 }
             }
 
-            // Explosion Particles
-            for (let i = explosionParticles.length - 1; i >= 0; i--) {
-                let exp = explosionParticles[i];
-                let positions = exp.system.geometry.attributes.position.array;
-
-                for (let j = 0; j < exp.velocities.length; j++) {
-                    positions[j * 3] += exp.velocities[j].x;
-                    positions[j * 3 + 1] += exp.velocities[j].y;
-                    positions[j * 3 + 2] += exp.velocities[j].z;
+            class Particle {
+                constructor(x, y, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 6 + 1;
+                    this.vx = Math.cos(angle) * speed;
+                    this.vy = Math.sin(angle) * speed;
+                    this.alpha = 1;
+                    this.decay = Math.random() * 0.02 + 0.015;
                 }
-
-                exp.system.geometry.attributes.position.needsUpdate = true;
-                exp.life -= 0.025;
-                exp.system.material.opacity = exp.life;
-
-                if (exp.life <= 0) {
-                    scene.remove(exp.system);
-                    explosionParticles.splice(i, 1);
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.vy += 0.05; // Gravity
+                    this.alpha -= this.decay;
+                    return this.alpha > 0;
                 }
-            }
-
-            renderer.render(scene, camera);
-        }
-
-        window.addEventListener('resize', () => {
-            if (camera && renderer) {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            }
-        });
-    </script>
-</body>
-</html>
