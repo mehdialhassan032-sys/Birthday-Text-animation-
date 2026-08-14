@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Cinematic Neon Birthday Surprise 🎉</title>
+    <title>3D Neon Infinite Birthday Surprise 🎉</title>
     
-    <!-- Google Fonts for Bold 3D Neon Look -->
+    <!-- Google Fonts for Bold 3D Neon Typography -->
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -16,8 +16,8 @@
             color: #fff; 
         }
 
-        /* Fullscreen Fireworks & Canvas */
-        #fireworksCanvas { position: fixed; inset: 0; z-index: 1; }
+        /* Canvas for Fireworks & Emitted Text Stars */
+        #mainCanvas { position: fixed; inset: 0; z-index: 1; }
 
         /* UI Screen for Link Generator */
         .creator-screen {
@@ -50,35 +50,30 @@
         #link-result { margin-top: 15px; display: none; }
         #generated-url { width: 100%; padding: 10px; background: #080015; border: 1px solid #00ffcc; color: #00ffcc; border-radius: 10px; margin-bottom: 10px; font-size: 0.85rem; word-break: break-all; }
 
-        /* Main Display Screen Container */
+        /* Main Animated Container */
         #wish-container {
-            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+            position: absolute; top: 43%; left: 50%; transform: translate(-50%, -50%);
             z-index: 10; text-align: center; width: 95%; pointer-events: none; display: none;
         }
 
-        /* --- 3D NEON TEXT STYLING (Image Exact Match) --- */
+        /* --- 3D NEON TEXT STYLING (Matching Analysis) --- */
         .neon-wrapper { position: relative; display: inline-block; margin: 2px 0; }
 
-        /* 1. HAPPY (Gold/Orange 3D Neon) */
+        /* HAPPY (Gold/Orange 3D Neon) */
         .text-happy {
             font-size: clamp(2.8rem, 10vw, 5.5rem);
-            letter-spacing: 4px;
-            color: #fff;
+            letter-spacing: 4px; color: #fff;
             text-shadow: 
-                /* Inner Tube Glow */
                 0 0 5px #fff, 0 0 10px #fff,
-                /* 3D Extrusion Side Depth */
-                0 1px 0 #cc6600, 0 2px 0 #b35900, 0 3px 0 #994d00, 0 4px 0 #804000, 0 5px 0 #663300, 0 6px 0 #4d2600,
+                0 1px 0 #cc6600, 0 2px 0 #b35900, 0 3px 0 #994d00, 0 4px 0 #804000, 0 5px 0 #663300,
                 0 8px 15px rgba(0,0,0,0.9),
-                /* Neon Glow Aura */
                 0 0 20px #ff9900, 0 0 40px #ff6600, 0 0 70px #ff3300;
         }
 
-        /* 2. BIRTHDAY (Magenta/Pink 3D Neon) */
+        /* BIRTHDAY (Magenta/Pink 3D Neon) */
         .text-birthday {
             font-size: clamp(2.8rem, 10vw, 5.5rem);
-            letter-spacing: 4px;
-            color: #fff;
+            letter-spacing: 4px; color: #fff;
             text-shadow: 
                 0 0 5px #fff, 0 0 10px #fff,
                 0 1px 0 #b30059, 0 2px 0 #99004d, 0 3px 0 #800040, 0 4px 0 #660033, 0 5px 0 #4d0026,
@@ -86,35 +81,28 @@
                 0 0 20px #ff007f, 0 0 40px #ff0055, 0 0 70px #d0006f;
         }
 
-        /* 3. NAME (Cyan/Electric Blue 3D Neon) */
+        /* NAME (Cyan/Electric Blue 3D Neon) */
         .text-name {
             font-size: clamp(3.5rem, 13vw, 7rem);
-            letter-spacing: 5px;
-            color: #fff;
-            margin-top: 10px;
+            letter-spacing: 5px; color: #fff; margin-top: 5px;
             text-shadow: 
                 0 0 5px #fff, 0 0 12px #fff,
-                0 1px 0 #0088cc, 0 2px 0 #0077b3, 0 3px 0 #006699, 0 4px 0 #005580, 0 5px 0 #004466, 0 6px 0 #00334d,
+                0 1px 0 #0088cc, 0 2px 0 #0077b3, 0 3px 0 #006699, 0 4px 0 #005580, 0 5px 0 #004466,
                 0 10px 20px rgba(0,0,0,0.95),
                 0 0 25px #00ffff, 0 0 50px #00bfff, 0 0 90px #0066ff;
         }
 
-        /* Golden Ornament Divider & Flourish */
-        .ornament {
-            color: #ffd700; font-size: 1.5rem; margin: 5px 0;
-            text-shadow: 0 0 10px #ffd700, 0 0 20px #ffaa00;
-        }
-        .heart-flourish {
-            color: #ff007f; font-size: 2rem; margin-top: -5px;
-            text-shadow: 0 0 15px #ff007f, 0 0 30px #ff0055;
-        }
+        /* Dividers */
+        .ornament { color: #ffd700; font-size: 1.4rem; margin: 3px 0; text-shadow: 0 0 10px #ffd700, 0 0 20px #ffaa00; }
+        .heart-flourish { color: #ff007f; font-size: 1.8rem; margin-top: -5px; text-shadow: 0 0 15px #ff007f, 0 0 30px #ff0055; }
 
-        /* --- FLYING ENTRANCE ANIMATIONS (Word by Word) --- */
+        /* --- CONTINUOUS NEVER-STOPPING ANIMATIONS --- */
         .word-container { opacity: 0; }
 
-        .fly-in-top-left { animation: flyTopLeft 1.2s cubic-bezier(0.25, 1, 0.5, 1) FORWARDS; }
-        .fly-in-top-right { animation: flyTopRight 1.2s cubic-bezier(0.25, 1, 0.5, 1) FORWARDS; }
-        .fly-in-bottom { animation: flyBottom 1.4s cubic-bezier(0.25, 1, 0.5, 1) FORWARDS; }
+        /* Entrance Flying Effects */
+        .fly-top-left { animation: flyTopLeft 1.2s cubic-bezier(0.25, 1, 0.5, 1) FORWARDS; }
+        .fly-top-right { animation: flyTopRight 1.2s cubic-bezier(0.25, 1, 0.5, 1) FORWARDS; }
+        .fly-bottom { animation: flyBottom 1.4s cubic-bezier(0.25, 1, 0.5, 1) FORWARDS; }
 
         @keyframes flyTopLeft {
             0% { opacity: 0; transform: translate(-100vw, -100vh) rotate(-45deg) scale(0.2); }
@@ -131,44 +119,48 @@
             100% { opacity: 1; transform: translate(0, 0) scale(1); }
         }
 
-        /* Continuous Slow Wave Floating Effect after landing */
-        .floating-wave {
-            animation: floatMotion 3.5s ease-in-out infinite alternate !important;
+        /* Infinite Motion Mode (Kabhi Nahi Rukega) */
+        .infinite-float-1 {
+            animation: infiniteWave1 3.5s ease-in-out infinite alternate !important;
+        }
+        .infinite-float-2 {
+            animation: infiniteWave2 4s ease-in-out infinite alternate !important;
+        }
+        .infinite-float-3 {
+            animation: infiniteWave3 3s ease-in-out infinite alternate !important;
         }
 
-        @keyframes floatMotion {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-12px) rotate(1deg); }
-            100% { transform: translateY(0px) rotate(-1deg); }
+        @keyframes infiniteWave1 {
+            0% { transform: translateY(0px) rotate(0deg) scale(1); filter: brightness(1); }
+            50% { transform: translateY(-15px) rotate(1.5deg) scale(1.03); filter: brightness(1.3); }
+            100% { transform: translateY(5px) rotate(-1.5deg) scale(0.98); filter: brightness(1); }
         }
 
-        /* --- SPARKLING STARS EFFECT ON TEXT --- */
-        .star-sparkle {
-            position: absolute; width: 12px; height: 12px;
-            background: radial-gradient(circle, #fff 30%, transparent 70%);
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: starTwinkle 1.2s ease-in-out infinite alternate;
-            pointer-events: none; z-index: 15;
+        @keyframes infiniteWave2 {
+            0% { transform: translateY(0px) rotate(0deg) scale(1); filter: brightness(1); }
+            50% { transform: translateY(12px) rotate(-2deg) scale(1.04); filter: brightness(1.4); }
+            100% { transform: translateY(-10px) rotate(2deg) scale(0.97); filter: brightness(1); }
         }
 
-        @keyframes starTwinkle {
-            0% { transform: scale(0.2) rotate(0deg); opacity: 0.1; }
-            100% { transform: scale(1.5) rotate(180deg); opacity: 1; filter: drop-shadow(0 0 10px #fff); }
+        @keyframes infiniteWave3 {
+            0% { transform: translateY(0px) scale(1); filter: brightness(1); }
+            50% { transform: translateY(-18px) scale(1.05); filter: brightness(1.5); }
+            100% { transform: translateY(0px) scale(1); filter: brightness(1); }
         }
 
-        /* --- WET FLOOR REFLECTION EFFECT --- */
+        /* --- WET FLOOR REFLECTION --- */
         #floor-reflection {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 25vh;
-            background: linear-gradient(to top, rgba(3, 1, 8, 0.9) 0%, transparent 100%);
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 26vh;
+            background: linear-gradient(to top, rgba(3, 1, 8, 0.95) 0%, transparent 100%);
             border-top: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 -20px 50px rgba(0, 255, 255, 0.15) inset;
+            box-shadow: 0 -20px 60px rgba(0, 255, 255, 0.18) inset;
             pointer-events: none; z-index: 5;
         }
     </style>
 </head>
 <body>
 
-    <!-- Generator UI -->
+    <!-- Link Generator Screen -->
     <div class="creator-screen" id="creator-ui">
         <div class="glass-box">
             <h2>3D Neon Wish Generator 🎉</h2>
@@ -182,21 +174,18 @@
         </div>
     </div>
 
-    <!-- Main Display Overlay -->
+    <!-- Main Animated Overlay -->
     <div id="wish-container">
-        <!-- Word 1: Fly From Top-Left -->
         <div class="word-container" id="w1">
             <span class="neon-wrapper text-happy" id="text-h">HAPPY</span>
         </div>
 
-        <!-- Word 2: Fly From Top-Right -->
+        <div class="ornament" id="orn1" style="opacity:0;">✦ ─── ★ ─── ✦</div>
+
         <div class="word-container" id="w2">
             <span class="neon-wrapper text-birthday" id="text-b">BIRTHDAY</span>
         </div>
 
-        <div class="ornament" id="orn1" style="opacity:0;">✦ ─── ★ ─── ✦</div>
-
-        <!-- Word 3: Fly From Bottom -->
         <div class="word-container" id="w3">
             <span class="neon-wrapper text-name" id="text-n">NAME</span>
         </div>
@@ -204,13 +193,13 @@
         <div class="heart-flourish" id="orn2" style="opacity:0;">༺ 🌸 ༻</div>
     </div>
 
-    <!-- Wet Ground Floor Reflection Layer -->
+    <!-- Wet Floor Reflection Layer -->
     <div id="floor-reflection"></div>
 
-    <canvas id="fireworksCanvas"></canvas>
+    <canvas id="mainCanvas"></canvas>
 
     <script>
-        const canvas = document.getElementById('fireworksCanvas');
+        const canvas = document.getElementById('mainCanvas');
         const ctx = canvas.getContext('2d');
 
         function resize() {
@@ -229,9 +218,8 @@
                 document.getElementById('wish-container').style.display = 'block';
                 document.getElementById('text-n').innerText = decodeURIComponent(nameParam);
                 
-                // Start Flying Word Animations & Fireworks
                 startFlyingSequence();
-                initFireworksEngine();
+                initEngine();
             }
         });
 
@@ -251,7 +239,7 @@
             alert("Magic Link Copied! Share with the Birthday Person 🎉");
         }
 
-        // --- WORD BY WORD FLYING SEQUENCE & STARS ATTACHMENT ---
+        // --- FLYING ENTRANCE & INFINITE ANIMATION SWITCH ---
         function startFlyingSequence() {
             const w1 = document.getElementById('w1');
             const w2 = document.getElementById('w2');
@@ -259,61 +247,43 @@
             const orn1 = document.getElementById('orn1');
             const orn2 = document.getElementById('orn2');
 
-            // Step 1: HAPPY flies in from Top-Left
-            setTimeout(() => {
-                w1.classList.add('fly-in-top-left');
-                addStarsToElement('text-h', 5);
-            }, 300);
+            // 1. HAPPY Flying Top-Left
+            setTimeout(() => { w1.classList.add('fly-top-left'); }, 300);
 
-            // Step 2: BIRTHDAY flies in from Top-Right
-            setTimeout(() => {
-                w2.classList.add('fly-in-top-right');
-                addStarsToElement('text-b', 6);
+            // 2. BIRTHDAY Flying Top-Right
+            setTimeout(() => { 
+                w2.classList.add('fly-top-right'); 
+                orn1.style.opacity = '1';
             }, 1000);
 
-            // Step 3: NAME flies in from Bottom
-            setTimeout(() => {
-                w3.classList.add('fly-in-bottom');
-                addStarsToElement('text-n', 8);
-                orn1.style.opacity = '1';
+            // 3. NAME Flying Bottom
+            setTimeout(() => { 
+                w3.classList.add('fly-bottom'); 
                 orn2.style.opacity = '1';
             }, 1800);
 
-            // Step 4: Convert all to continuous smooth floating wave motion
+            // 4. Switch to NEVER-STOPPING INFINITE ANIMATIONS
             setTimeout(() => {
-                [w1, w2, w3].forEach(el => {
-                    el.classList.add('floating-wave');
-                });
+                w1.className = 'word-container infinite-float-1';
+                w2.className = 'word-container infinite-float-2';
+                w3.className = 'word-container infinite-float-3';
             }, 3200);
         }
 
-        // Dynamically add sparkling stars on text letters
-        function addStarsToElement(elementId, count) {
-            const parent = document.getElementById(elementId);
-            for(let i = 0; i < count; i++) {
-                let star = document.createElement('div');
-                star.className = 'star-sparkle';
-                star.style.top = (Math.random() * 80 + 5) + '%';
-                star.style.left = (Math.random() * 90 + 5) + '%';
-                star.style.animationDelay = (Math.random() * 1.2) + 's';
-                parent.appendChild(star);
-            }
-        }
-
-        // --- DENSE RICH FIREWORKS SYSTEM ---
-        function initFireworksEngine() {
+        // --- FULL ENGINE: FIREWORKS + TEXT STAR EMITTER ---
+        function initEngine() {
             let particles = [];
             let rockets = [];
+            let emittedStars = [];
 
             class Rocket {
                 constructor() {
                     this.x = Math.random() * canvas.width;
                     this.y = canvas.height;
-                    this.targetY = Math.random() * (canvas.height * 0.5) + 40;
+                    this.targetY = Math.random() * (canvas.height * 0.5) + 30;
                     this.speed = Math.random() * 3 + 7;
-                    // Colors matching image: Gold, Magenta, Cyan
-                    const colorChoices = ['#ffd700', '#ff007f', '#00ffff', '#ff5500', '#00ffaa'];
-                    this.color = colorChoices[Math.floor(Math.random() * colorChoices.length)];
+                    const colors = ['#ffd700', '#ff007f', '#00ffff', '#ff5500', '#00ffaa'];
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
                 }
                 update() {
                     this.y -= this.speed;
@@ -333,9 +303,7 @@
 
             class Particle {
                 constructor(x, y, color) {
-                    this.x = x;
-                    this.y = y;
-                    this.color = color;
+                    this.x = x; this.y = y; this.color = color;
                     const angle = Math.random() * Math.PI * 2;
                     const speed = Math.random() * 8 + 1;
                     this.vx = Math.cos(angle) * speed;
@@ -344,9 +312,8 @@
                     this.decay = Math.random() * 0.018 + 0.01;
                 }
                 update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    this.vy += 0.05; // Gravity
+                    this.x += this.vx; this.y += this.vy;
+                    this.vy += 0.05;
                     this.alpha -= this.decay;
                     return this.alpha > 0;
                 }
@@ -354,30 +321,72 @@
                     ctx.save();
                     ctx.globalAlpha = this.alpha;
                     ctx.beginPath();
-                    ctx.arc(this.x, this.y, 2.8, 0, Math.PI * 2);
+                    ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
                     ctx.fillStyle = this.color;
                     ctx.fill();
                     ctx.restore();
                 }
             }
 
+            // Continuous Star Particles Emitter from Text Position
+            class TextStarParticle {
+                constructor() {
+                    // Random positions around the text container area
+                    const bounds = document.getElementById('wish-container').getBoundingClientRect();
+                    this.x = bounds.left + Math.random() * bounds.width;
+                    this.y = bounds.top + Math.random() * bounds.height;
+                    this.size = Math.random() * 4 + 2;
+                    this.vx = (Math.random() - 0.5) * 2;
+                    this.vy = (Math.random() - 0.5) * 2 - 1; // Floating upwards
+                    this.alpha = 1;
+                    this.color = Math.random() > 0.5 ? '#ffd700' : '#00ffff';
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.alpha -= 0.012;
+                    return this.alpha > 0;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    // Draw 4-point star shape
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
             function explode(x, y, color) {
-                for (let i = 0; i < 70; i++) {
+                for (let i = 0; i < 65; i++) {
                     particles.push(new Particle(x, y, color));
                 }
             }
 
-            setInterval(() => { rockets.push(new Rocket()); }, 280);
+            // Firework Rocket interval
+            setInterval(() => { rockets.push(new Rocket()); }, 300);
 
-            function render() {
-                requestAnimationFrame(render);
+            // Continuously emit stars from Text Area (No Limit)
+            setInterval(() => {
+                if(document.getElementById('wish-container').style.display === 'block') {
+                    for(let i=0; i<4; i++) {
+                        emittedStars.push(new TextStarParticle());
+                    }
+                }
+            }, 100);
+
+            function loop() {
+                requestAnimationFrame(loop);
                 ctx.fillStyle = 'rgba(3, 1, 8, 0.22)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                 rockets = rockets.filter(r => { r.draw(); return r.update(); });
                 particles = particles.filter(p => { p.draw(); return p.update(); });
+                emittedStars = emittedStars.filter(s => { s.draw(); return s.update(); });
             }
-            render();
+            loop();
         }
     </script>
 </body>
