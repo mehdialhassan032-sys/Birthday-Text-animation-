@@ -2,96 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grand Cinematic Birthday</title>
+    <title>Grand Celebration</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background: #020108; font-family: 'Segoe UI', sans-serif; }
-        
-        /* 3D Canvas */
-        #c { position: fixed; inset: 0; z-index: 1; }
+        body { margin: 0; background: #000; overflow: hidden; font-family: 'Arial', sans-serif; }
+        canvas { display: block; }
 
-        /* Text Layer */
-        #text-overlay {
-            position: absolute; inset: 0; z-index: 10;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            pointer-events: none; perspective: 1000px;
+        /* UI Styling */
+        #ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.85); z-index: 100;
         }
-
-        .text-line { 
-            opacity: 0; transform: translateY(50px) rotateX(-30deg); 
-            filter: blur(15px); transition: all 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+        .card {
+            background: #111; padding: 40px; border-radius: 20px;
+            text-align: center; border: 1px solid #444; color: white;
+            box-shadow: 0 0 30px rgba(255,215,0,0.2);
         }
-        
-        .revealed { opacity: 1 !important; transform: translateY(0) rotateX(0) !important; filter: blur(0px) !important; }
-
-        .happy-birthday {
-            font-family: 'Cinzel', serif; font-size: clamp(2rem, 8vw, 4rem);
-            color: #fff; text-transform: uppercase; letter-spacing: 10px;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        input { 
+            padding: 12px; width: 250px; border-radius: 8px; border: none; 
+            margin-bottom: 20px; font-size: 1rem;
         }
-
-        .name-text {
-            font-family: 'Montserrat', sans-serif; font-size: clamp(4rem, 15vw, 9rem);
-            font-weight: 900; color: transparent;
-            -webkit-text-stroke: 2px #ffd700;
-            text-shadow: 0 0 30px #ffd700, 0 0 60px #ff8c00;
-            margin-top: 20px;
+        button { 
+            padding: 12px 25px; border-radius: 8px; border: none; 
+            background: #ffd700; font-weight: bold; cursor: pointer; 
         }
-
-        /* UI */
-        #ui { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 20; text-align: center; background: rgba(0,0,0,0.8); padding: 30px; border-radius: 20px; border: 1px solid #444; }
-        input { padding: 15px; border-radius: 10px; border: none; width: 250px; font-size: 1.2rem; }
-        button { padding: 15px 30px; border-radius: 10px; border: none; background: #ffd700; font-weight: bold; cursor: pointer; }
+        #link-box { display: none; margin-top: 20px; }
+        #share-url { background: #222; color: #0f0; padding: 10px; width: 300px; border: none; }
     </style>
 </head>
 <body>
 
-<div id="ui">
-    <input type="text" id="name" placeholder="Name enter karo...">
-    <button onclick="start()">Start Celebration</button>
+<!-- Setup Screen -->
+<div id="ui-layer">
+    <div class="card">
+        <h1>✨ Create Celebration</h1>
+        <input type="text" id="name-input" placeholder="Enter Name...">
+        <br>
+        <button onclick="generateLink()">Create Link</button>
+        
+        <div id="link-box">
+            <p>Copy this link:</p>
+            <input type="text" id="share-url" readonly>
+            <button onclick="copyLink()">Copy</button>
+        </div>
+    </div>
 </div>
 
-<div id="text-overlay">
-    <div class="text-line happy-birthday" id="line1">Happy Birthday</div>
-    <div class="text-line name-text" id="line2">NAME</div>
-</div>
-
-<canvas id="c"></canvas>
+<canvas id="fireworks"></canvas>
 
 <script>
-    const canvas = document.getElementById('c');
+    const canvas = document.getElementById('fireworks');
     const ctx = canvas.getContext('2d');
     let particles = [];
 
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resize); resize();
+    // --- URL PARAMETER LOGIC ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const nameParam = urlParams.get('name');
 
-    function start() {
-        const name = document.getElementById('name').value;
-        if(!name) return;
-        document.getElementById('ui').style.display = 'none';
-        document.getElementById('line2').innerText = name;
-        
-        // Text Animation Logic
-        setTimeout(() => document.getElementById('line1').classList.add('revealed'), 500);
-        setTimeout(() => document.getElementById('line2').classList.add('revealed'), 1200);
-
-        loop();
-        setInterval(spawnFirework, 600); // Realistic timing
+    if (nameParam) {
+        document.getElementById('ui-layer').style.display = 'none';
+        startCelebration(nameParam);
     }
 
+    function generateLink() {
+        const name = document.getElementById('name-input').value;
+        if(!name) return alert("Please enter a name");
+        const url = window.location.origin + window.location.pathname + "?name=" + encodeURIComponent(name);
+        document.getElementById('share-url').value = url;
+        document.getElementById('link-box').style.display = 'block';
+    }
+
+    function copyLink() {
+        document.getElementById('share-url').select();
+        document.execCommand('copy');
+        alert("Link copied!");
+    }
+
+    // --- REALISTIC PHYSICS ENGINE ---
     class Particle {
         constructor(x, y, color) {
             this.x = x; this.y = y;
-            const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 8 + 2;
-            this.vx = Math.cos(angle) * speed;
-            this.vy = Math.sin(angle) * speed;
-            this.alpha = 1;
             this.color = color;
-            this.friction = 0.95;
-            this.gravity = 0.15;
+            this.angle = Math.random() * Math.PI * 2;
+            this.velocity = Math.random() * 6 + 2;
+            this.vx = Math.cos(this.angle) * this.velocity;
+            this.vy = Math.sin(this.angle) * this.velocity;
+            this.gravity = 0.12; // Realistic drop
+            this.friction = 0.95; // Air resistance
+            this.alpha = 1;
+            this.decay = Math.random() * 0.015 + 0.01;
         }
         update() {
             this.vx *= this.friction;
@@ -99,7 +98,7 @@
             this.vy += this.gravity;
             this.x += this.vx;
             this.y += this.vy;
-            this.alpha -= 0.015;
+            this.alpha -= this.decay;
         }
         draw() {
             ctx.globalAlpha = this.alpha;
@@ -110,24 +109,44 @@
         }
     }
 
-    function spawnFirework() {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * (canvas.height * 0.4);
-        const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#F1FF33', '#FFFFFF'];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        
-        for (let i = 0; i < 100; i++) {
-            particles.push(new Particle(x, y, color));
-        }
-    }
+    function startCelebration(name) {
+        // Text Effect
+        const drawText = () => {
+            ctx.fillStyle = "white";
+            ctx.font = "bold 60px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("Happy Birthday", canvas.width/2, canvas.height/2 - 50);
+            ctx.fillStyle = "#ffd700";
+            ctx.fillText(name, canvas.width/2, canvas.height/2 + 50);
+        };
 
-    function loop() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Fading trail effect for realism
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        particles = particles.filter(p => p.alpha > 0);
-        particles.forEach(p => { p.update(); p.draw(); });
-        requestAnimationFrame(loop);
+        // Animation Loop
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; // Motion blur trail
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Randomly spawn fireworks
+            if(Math.random() < 0.05) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height * 0.5;
+                const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                for(let i=0; i<80; i++) particles.push(new Particle(x, y, color));
+            }
+
+            particles.forEach((p, index) => {
+                p.update();
+                p.draw();
+                if(p.alpha <= 0) particles.splice(index, 1);
+            });
+
+            drawText();
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        animate();
     }
 </script>
 </body>
