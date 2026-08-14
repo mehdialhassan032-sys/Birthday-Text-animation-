@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magical Birthday Surprise 🎉</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Fredoka+One&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
@@ -27,7 +27,7 @@
         }
 
         .glass-box h2 { 
-            font-family: 'Cinzel Decorative', cursive; color: #ffd700; margin-bottom: 20px; font-size: 1.6rem;
+            color: #ffd700; margin-bottom: 20px; font-size: 1.6rem;
             text-shadow: 0 0 10px rgba(255,215,0,0.6);
         }
         
@@ -48,10 +48,10 @@
         #generated-url { width: 100%; padding: 10px; background: #11081f; border: 1px solid #00ffcc; color: #00ffcc; border-radius: 10px; margin-bottom: 10px; font-size: 0.85rem; word-break: break-all; }
 
         /* Animation Canvas & Container */
-        #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        #canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
         canvas { display: block; width: 100%; height: 100%; }
 
-        /* Animated Glowing Text Container */
+        /* Animated Glowing Moving Text Container */
         #wish-container {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 10; text-align: center; width: 90%; pointer-events: none;
@@ -84,7 +84,7 @@
             text-transform: uppercase;
         }
 
-        /* Continuous Animations */
+        /* Continuous Dynamic Text Animations */
         @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             100% { background-position: 100% 50%; }
@@ -92,28 +92,13 @@
 
         @keyframes floatWave {
             0% { transform: translateY(0px) rotate(0deg) scale(1); }
-            50% { transform: translateY(-20px) rotate(2deg) scale(1.03); }
-            100% { transform: translateY(0px) rotate(-2deg) scale(1); }
+            50% { transform: translateY(-25px) rotate(3deg) scale(1.05); }
+            100% { transform: translateY(0px) rotate(-3deg) scale(1); }
         }
 
         @keyframes pulseGlow {
             0% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #ff007f; }
-            100% { text-shadow: 0 0 20px #ffd700, 0 0 40px #ff007f, 0 0 90px #ff007f; }
-        }
-
-        /* Tap Prompt */
-        #music-prompt {
-            position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%);
-            z-index: 50; background: rgba(255,255,255,0.12); backdrop-filter: blur(10px); 
-            padding: 12px 25px; border-radius: 30px; border: 1px solid #ffd700; 
-            font-size: 0.85rem; font-weight: 700; color: #ffd700;
-            letter-spacing: 1px; animation: pulseBtn 1.2s infinite alternate;
-            display: none; text-align: center; cursor: pointer;
-        }
-
-        @keyframes pulseBtn {
-            0% { opacity: 0.7; transform: translateX(-50%) scale(0.95); }
-            100% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+            100% { text-shadow: 0 0 25px #ffd700, 0 0 50px #ff007f, 0 0 100px #ff007f; }
         }
     </style>
 </head>
@@ -136,23 +121,29 @@
         <div class="animated-title">HAPPY BIRTHDAY</div>
         <div class="animated-name" id="display-name">NAME</div>
     </div>
-
-    <div id="music-prompt">✨ TAP ANYWHERE FOR FIREWORKS ✨</div>
     
     <div id="canvas-container">
         <canvas id="fireworksCanvas"></canvas>
     </div>
 
     <script>
-        const nameParam = new URLSearchParams(window.location.search).get('name');
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const nameParam = urlParams.get('name');
 
-        if (nameParam) {
-            document.getElementById('creator-ui').style.display = 'none';
-            document.getElementById('wish-container').style.display = 'block';
-            document.getElementById('music-prompt').style.display = 'block';
-            document.getElementById('display-name').innerText = decodeURIComponent(nameParam);
-            initFireworks();
-        }
+            // Agar link me ?name=... hai toh DIRECT AUTOMATIC start karo!
+            if (nameParam) {
+                document.getElementById('creator-ui').style.display = 'none';
+                document.getElementById('wish-container').style.display = 'block';
+                document.getElementById('display-name').innerText = decodeURIComponent(nameParam);
+                
+                // Direct Fireworks + Confetti Blast Start!
+                initFireworks();
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 120, spread: 100, origin: { y: 0.6 } });
+                }
+            }
+        });
 
         function generateLink() {
             let name = document.getElementById('name-input').value.trim();
@@ -169,10 +160,10 @@
             let copyText = document.getElementById('generated-url');
             copyText.select();
             document.execCommand("copy");
-            alert("Magic Link Copied! Share it with the Birthday Person 🎉");
+            alert("Magic Link Copied! Send it to the Birthday Person 🎉");
         }
 
-        // --- ULTRA SMOOTH 2D CANVAS FIREWORKS & ROCKET SYSTEM ---
+        // --- FULLSCREEN AUTOMATIC FIREWORKS SYSTEM ---
         function initFireworks() {
             const canvas = document.getElementById('fireworksCanvas');
             const ctx = canvas.getContext('2d');
@@ -226,7 +217,50 @@
                 update() {
                     this.x += this.vx;
                     this.y += this.vy;
-                    this.vy += 0.05; // Gravity
+                    this.vy += 0.05;
                     this.alpha -= this.decay;
                     return this.alpha > 0;
                 }
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            function createExplosion(x, y, color) {
+                for (let i = 0; i < 50; i++) {
+                    particles.push(new Particle(x, y, color));
+                }
+            }
+
+            // Continuous Auto-Rockets Launch
+            setInterval(() => {
+                rockets.push(new Rocket());
+            }, 350);
+
+            function loop() {
+                requestAnimationFrame(loop);
+                ctx.fillStyle = 'rgba(5, 2, 10, 0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                rockets = rockets.filter(r => {
+                    r.draw();
+                    return r.update();
+                });
+
+                particles = particles.filter(p => {
+                    p.draw();
+                    return p.update();
+                });
+            }
+
+            loop();
+        }
+    </script>
+</body>
+</html>
