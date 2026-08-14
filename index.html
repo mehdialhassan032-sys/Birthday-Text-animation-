@@ -1,437 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grand Assam Mountain & River Cosmic Birthday 🎉</title>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@900&family=Montserrat:wght@900&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { 
-            width: 100%; height: 100%; overflow: hidden; 
-            background: #020005; font-family: 'Montserrat', sans-serif; 
-            color: #fff; 
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Celebration — Live Fireworks</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700;1,900&family=Poppins:wght@300;600;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#050211; --bg-mid:#0b0420;
+    --gold:#f4d58d; --gold-bright:#ffe9b0; --cream:#fff6e0;
+    --ember:#ff6b35; --ink:#0a0614;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--bg-deep);font-family:'Poppins',sans-serif;color:#fff;}
 
-        /* Fullscreen Canvas for Assam Landscape, River, Stars & Massive Rocket Bombs */
-        #sceneCanvas { position: fixed; inset: 0; z-index: 1; }
+  #webgl-container{position:fixed;inset:0;z-index:1;}
 
-        /* Creator Glassmorphism Screen */
-        .creator-screen {
-            position: absolute; inset: 0; z-index: 100;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: radial-gradient(circle at center, #1a0230 0%, #030008 100%);
-            font-family: 'Poppins', sans-serif;
-        }
+  .creator-screen{
+    position:absolute;inset:0;z-index:100;
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(ellipse at 50% 30%, #1a0f36 0%, var(--bg-deep) 70%);
+  }
+  .glass-box{
+    width:90%;max-width:420px;padding:44px 34px;border-radius:22px;
+    background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);
+    border:1px solid rgba(244,213,141,0.25);
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    text-align:center;
+  }
+  .glass-box .eyebrow{
+    font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;
+    color:var(--gold);opacity:0.7;margin-bottom:10px;font-weight:600;
+  }
+  .glass-box h2{
+    font-family:'Playfair Display',serif;font-style:italic;font-weight:700;
+    font-size:1.6rem;color:var(--cream);margin-bottom:26px;
+  }
+  input{
+    width:100%;padding:14px 16px;border-radius:12px;
+    border:1px solid rgba(244,213,141,0.35);
+    background:rgba(0,0,0,0.35);color:#fff;font-size:1rem;
+    text-align:center;outline:none;margin-bottom:16px;font-family:'Poppins',sans-serif;
+  }
+  input::placeholder{color:rgba(255,255,255,0.4);}
+  button{
+    width:100%;padding:14px 26px;border:none;border-radius:12px;cursor:pointer;
+    font-family:'Poppins',sans-serif;font-weight:600;font-size:0.95rem;letter-spacing:0.5px;
+    background:linear-gradient(135deg,var(--gold) 0%,var(--ember) 100%);
+    color:var(--ink);transition:transform .25s ease, box-shadow .25s ease;
+    box-shadow:0 8px 24px rgba(255,107,53,0.25);
+  }
+  button:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(255,107,53,0.4);}
+  #link-result{margin-top:14px;display:none;}
+  #generated-url{
+    font-family:'Poppins',sans-serif;font-size:0.75rem;
+    border:1px solid rgba(244,213,141,0.3);color:var(--gold);
+    background:rgba(0,0,0,0.4);word-break:break-all;
+  }
 
-        .glass-box {
-            background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(30px);
-            padding: 40px 30px; border-radius: 28px; border: 1.5px solid rgba(255, 215, 0, 0.4);
-            text-align: center; width: 90%; max-width: 440px;
-            box-shadow: 0 0 70px rgba(186, 85, 211, 0.3);
-        }
+  #wish-stage{
+    position:absolute;top:36%;left:50%;transform:translate(-50%,-50%);
+    z-index:10;text-align:center;width:95%;pointer-events:none;display:none;
+  }
+  .line{margin:2px 0;}
 
-        .glass-box h2 { 
-            color: #ffd700; margin-bottom: 22px; font-size: 1.6rem; 
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.7); 
-            font-family: 'Cinzel Decorative', cursive; 
-        }
-        
-        input {
-            width: 100%; padding: 15px; border-radius: 30px; border: 2px solid #00f2fe;
-            background: rgba(5, 0, 15, 0.9); color: #fff; font-size: 1.1rem; text-align: center; outline: none; margin-bottom: 18px;
-        }
-        
-        button {
-            background: linear-gradient(45deg, #ffd700, #ff007f, #7928ca);
-            color: #fff; border: none; padding: 15px 30px; font-size: 1.05rem; font-weight: 800;
-            border-radius: 30px; cursor: pointer; transition: all 0.3s; text-transform: uppercase;
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.6); width: 100%;
-        }
-        button:hover { transform: scale(1.03); box-shadow: 0 0 45px #00f2fe; }
+  .word{
+    display:inline-block;opacity:0;filter:blur(14px);
+    transform:translateY(28px);
+    animation:reveal 1.4s cubic-bezier(0.16,0.9,0.28,1) forwards;
+  }
+  @keyframes reveal{
+    to{opacity:1;filter:blur(0);transform:translateY(0);}
+  }
 
-        #link-result { margin-top: 15px; display: none; }
-        #generated-url { width: 100%; padding: 12px; background: #080015; border: 1px solid #00ffcc; color: #00ffcc; border-radius: 12px; margin-bottom: 10px; font-size: 0.85rem; word-break: break-all; }
+  .script-word{
+    font-family:'Playfair Display',serif;font-style:italic;font-weight:700;
+    font-size:clamp(2.2rem,7vw,4rem);letter-spacing:1px;
+    background:linear-gradient(180deg,var(--cream) 0%,var(--gold) 55%,#c99a45 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 22px rgba(244,213,141,0.55));
+  }
 
-        /* Main Wish Stage Overlay */
-        #wish-stage {
-            position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 10; text-align: center; width: 95%; pointer-events: none; display: none;
-        }
+  .divider{
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    opacity:0;animation:fadeIn 1.2s ease forwards;
+    margin:10px 0;
+  }
+  .divider .rule{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+  .divider .dot{width:6px;height:6px;transform:rotate(45deg);background:var(--gold);box-shadow:0 0 10px var(--gold);}
+  @keyframes fadeIn{to{opacity:1;}}
 
-        .word-container { opacity: 0; animation-fill-mode: forwards !important; margin: 4px 0; }
+  .name-word{
+    font-family:'Poppins',sans-serif;font-weight:900;text-transform:uppercase;
+    font-size:clamp(2.6rem,10vw,6rem);letter-spacing:6px;margin-top:6px;
+    background:linear-gradient(100deg,#c99a45 0%,var(--cream) 20%,var(--gold-bright) 40%,#c99a45 60%,var(--cream) 80%,var(--gold-bright) 100%);
+    background-size:250% auto;
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 28px rgba(255,233,176,0.5));
+    animation:reveal 1.6s cubic-bezier(0.16,0.9,0.28,1) forwards, shimmer 5s linear infinite 2.4s;
+  }
+  @keyframes shimmer{
+    to{background-position:-250% center;}
+  }
 
-        /* --- GRAND TYPOGRAPHY & GLOW --- */
-        .text-happy {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: clamp(2.5rem, 9vw, 5rem);
-            font-weight: 900; letter-spacing: 6px;
-            background: linear-gradient(180deg, #ffffff 0%, #ffe600 45%, #ff8c00 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 35px rgba(255, 215, 0, 0.9));
-        }
-
-        .text-birthday {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: clamp(2.5rem, 9vw, 5rem);
-            font-weight: 900; letter-spacing: 6px;
-            background: linear-gradient(180deg, #ffffff 0%, #ff007f 50%, #9900e6 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 35px rgba(255, 0, 127, 0.9));
-        }
-
-        .text-name {
-            font-family: 'Montserrat', sans-serif;
-            font-size: clamp(3.5rem, 12vw, 7rem);
-            font-weight: 900; letter-spacing: 8px; margin-top: 8px; text-transform: uppercase;
-            background: linear-gradient(180deg, #ffffff 0%, #00f2fe 45%, #0066ff 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 45px rgba(0, 242, 254, 1));
-        }
-
-        .ornament { color: #ffd700; font-size: 1.5rem; margin: 2px 0; text-shadow: 0 0 15px #ffd700; font-family: 'Cinzel Decorative', cursive; }
-
-        /* --- TEXT ANIMATION: SLOW, BLUR-TO-CLEAR, ROTATE, & BOOSTER GLOW --- */
-        .blur-rotate-fly-1 { animation: blurRotateIn 2.5s cubic-bezier(0.15, 0.85, 0.35, 1.2) forwards; }
-        .blur-rotate-fly-2 { animation: blurRotateIn 2.8s cubic-bezier(0.15, 0.85, 0.35, 1.2) forwards; }
-        .blur-rotate-fly-3 { animation: blurRotateIn 3.2s cubic-bezier(0.15, 0.85, 0.35, 1.2) forwards; }
-
-        @keyframes blurRotateIn {
-            0% {
-                opacity: 0;
-                filter: blur(25px) drop-shadow(0 0 50px currentColor);
-                transform: translateY(120px) rotate(-180deg) scale(0.2);
-            }
-            60% {
-                opacity: 0.8;
-                filter: blur(8px) drop-shadow(0 0 30px currentColor);
-                transform: translateY(-20px) rotate(15deg) scale(1.05);
-            }
-            100% {
-                opacity: 1;
-                filter: blur(0px) drop-shadow(0 0 20px currentColor);
-                transform: translateY(0) rotate(0deg) scale(1);
-            }
-        }
-
-        /* Forever Alive Breathing Float (Never Disappears) */
-        .alive-float-1 { opacity: 1 !important; animation: aliveWave1 4s ease-in-out infinite alternate !important; }
-        .alive-float-2 { opacity: 1 !important; animation: aliveWave2 4.5s ease-in-out infinite alternate !important; }
-        .alive-float-3 { opacity: 1 !important; animation: aliveWave3 3.8s ease-in-out infinite alternate !important; }
-
-        @keyframes aliveWave1 {
-            0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 20px #ffaa00); }
-            50% { transform: translateY(-12px) scale(1.02); filter: drop-shadow(0 0 35px #ffaa00); }
-            100% { transform: translateY(4px) scale(0.99); filter: drop-shadow(0 0 20px #ffaa00); }
-        }
-        @keyframes aliveWave2 {
-            0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 20px #ff007f); }
-            50% { transform: translateY(12px) scale(1.03); filter: drop-shadow(0 0 35px #ff007f); }
-            100% { transform: translateY(-8px) scale(0.98); filter: drop-shadow(0 0 20px #ff007f); }
-        }
-        @keyframes aliveWave3 {
-            0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 25px #00f2fe); }
-            50% { transform: translateY(-15px) scale(1.04); filter: drop-shadow(0 0 45px #00f2fe); }
-            100% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 25px #00f2fe); }
-        }
-    </style>
+  .float{animation-name: floaty; animation-duration:5.5s; animation-timing-function:ease-in-out; animation-iteration-count:infinite; animation-direction:alternate;}
+  @keyframes floaty{
+    0%{transform:translateY(0);}
+    100%{transform:translateY(-8px);}
+  }
+</style>
 </head>
 <body>
 
-    <!-- Link Generator UI -->
-    <div class="creator-screen" id="creator-ui">
-        <div class="glass-box">
-            <h2>✨ Assam Mountain Cosmic Wish</h2>
-            <input type="text" id="name-input" placeholder="Enter Name Here..." />
-            <button onclick="generateLink()">Create Magic Link 🚀</button>
-
-            <div id="link-result">
-                <input type="text" id="generated-url" readonly />
-                <button onclick="copyLink()">Copy Magic Link 📋</button>
-            </div>
-        </div>
+<div class="creator-screen" id="creator-ui">
+  <div class="glass-box">
+    <div class="eyebrow">Assam · Live Fireworks</div>
+    <h2>Create a Birthday Wish</h2>
+    <input type="text" id="name-input" placeholder="Enter a name..." />
+    <button onclick="generateLink()">Create Link</button>
+    <div id="link-result">
+      <input type="text" id="generated-url" readonly />
+      <button onclick="copyLink()" style="margin-top:8px;">Copy Link</button>
     </div>
+  </div>
+</div>
 
-    <!-- Main Stage Overlay -->
-    <div id="wish-stage">
-        <div class="word-container" id="w1">
-            <span class="text-happy">HAPPY</span>
-        </div>
+<div id="wish-stage">
+  <div class="line"><span class="word script-word" id="w1" style="animation-delay:.2s;">Happy</span></div>
+  <div class="divider" id="d1" style="animation-delay:1.5s;"><span class="rule"></span><span class="dot"></span><span class="rule"></span></div>
+  <div class="line"><span class="word script-word" id="w2" style="animation-delay:1.7s;">Birthday</span></div>
+  <div class="line"><span class="name-word" id="name-display" style="animation-delay:3.1s;">NAME</span></div>
+</div>
 
-        <div class="ornament" id="orn1" style="opacity:0;">✦ ─── ❖ ─── ✦</div>
+<div id="webgl-container"></div>
 
-        <div class="word-container" id="w2">
-            <span class="text-birthday">BIRTHDAY</span>
-        </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('name');
+  if (name) {
+    document.getElementById('creator-ui').style.display = 'none';
+    document.getElementById('wish-stage').style.display = 'block';
+    document.getElementById('name-display').innerText = decodeURIComponent(name);
 
-        <div class="word-container" id="w3">
-            <span class="text-name" id="name-display">NAME</span>
-        </div>
+    setTimeout(() => {
+      document.querySelectorAll('.word').forEach(el => el.classList.add('float'));
+    }, 4800);
 
-        <div class="ornament" id="orn2" style="opacity:0; font-size:1.2rem; margin-top:-5px;">༺ 👑 ༻</div>
-    </div>
+    initScene();
+  }
+});
 
-    <!-- Master Interactive Scene Canvas -->
-    <canvas id="sceneCanvas"></canvas>
+function generateLink() {
+  const val = document.getElementById('name-input').value.trim();
+  if (!val) { alert('Please enter a name!'); return; }
+  const base = window.location.href.split('?')[0];
+  const url = `${base}?name=${encodeURIComponent(val)}`;
+  document.getElementById('generated-url').value = url;
+  document.getElementById('link-result').style.display = 'block';
+}
+function copyLink() {
+  const el = document.getElementById('generated-url');
+  el.select();
+  document.execCommand('copy');
+  alert('Link copied!');
+}
 
-    <script>
-        const canvas = document.getElementById('sceneCanvas');
-        const ctx = canvas.getContext('2d');
+/* ================= THREE.JS SCENE ================= */
+function initScene() {
+  const container = document.getElementById('webgl-container');
 
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resize();
-        window.addEventListener('resize', resize);
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x03010a, 0.0075);
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const nameParam = urlParams.get('name');
+  const camera = new THREE.PerspectiveCamera(58, innerWidth / innerHeight, 0.1, 1000);
+  camera.position.set(0, 14, 92);
 
-            if (nameParam) {
-                document.getElementById('creator-ui').style.display = 'none';
-                document.getElementById('wish-stage').style.display = 'block';
-                document.getElementById('name-display').innerText = decodeURIComponent(nameParam);
-                
-                startEntranceSequence();
-                startAssamLandscapeEngine();
-            }
+  const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  container.appendChild(renderer.domElement);
+
+  scene.add(new THREE.AmbientLight(0x1a0f33, 1.1));
+  const moon = new THREE.DirectionalLight(0x7d92ff, 1.1);
+  moon.position.set(0, 100, -50);
+  scene.add(moon);
+
+  function makeGlowTexture() {
+    const c = document.createElement('canvas');
+    c.width = c.height = 128;
+    const ctx = c.getContext('2d');
+    const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, 'rgba(255,255,255,1)');
+    g.addColorStop(0.25, 'rgba(255,255,255,0.9)');
+    g.addColorStop(0.6, 'rgba(255,255,255,0.25)');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(c);
+  }
+  const glowTex = makeGlowTexture();
+
+  const mGeo = new THREE.PlaneGeometry(300, 100, 90, 40);
+  const mPos = mGeo.attributes.position;
+  for (let i = 0; i < mPos.count; i++) {
+    const x = mPos.getX(i), y = mPos.getY(i);
+    let z = Math.sin(x * 0.05) * Math.cos(y * 0.08) * 18 + Math.sin(x * 0.1) * 8;
+    if (y < -10) z *= 0.2;
+    mPos.setZ(i, z);
+  }
+  mGeo.computeVertexNormals();
+  const mountain = new THREE.Mesh(mGeo, new THREE.MeshStandardMaterial({ color: 0x0b0620, roughness: 0.9, metalness: 0.1, flatShading: true }));
+  mountain.position.set(0, 12, -40);
+  mountain.rotation.x = -Math.PI * 0.05;
+  scene.add(mountain);
+
+  const wGeo = new THREE.PlaneGeometry(300, 120, 60, 60);
+  const water = new THREE.Mesh(wGeo, new THREE.MeshStandardMaterial({ color: 0x02040f, roughness: 0.15, metalness: 0.75 }));
+  water.rotation.x = -Math.PI / 2;
+  water.position.set(0, -15, 20);
+  scene.add(water);
+
+  const starGeo = new THREE.BufferGeometry();
+  const starCount = 1000;
+  const starPos = new Float32Array(starCount * 3);
+  for (let i = 0; i < starCount * 3; i += 3) {
+    starPos[i] = (Math.random() - 0.5) * 400;
+    starPos[i + 1] = Math.random() * 150 + 10;
+    starPos[i + 2] = (Math.random() - 0.5) * 200 - 50;
+  }
+  starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.7, map: glowTex, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, depthWrite: false })));
+
+  const FIREWORK_COLORS = [0xffd27f, 0xff6b35, 0xff2d55, 0x4da6ff, 0x36d399, 0xffffff];
+  let rockets = [];
+  let trailSparks = [];
+  let bursts = [];
+
+  class Rocket {
+    constructor() {
+      this.x = (Math.random() - 0.5) * 110;
+      this.z = (Math.random() - 0.5) * 30 - 10;
+      this.y = -14.5;
+      this.targetY = Math.random() * 20 + 26;
+      this.vy = Math.random() * 0.55 + 1.05;
+      this.color = FIREWORK_COLORS[Math.floor(Math.random() * FIREWORK_COLORS.length)];
+      this.tick = 0;
+
+      this.mat = new THREE.SpriteMaterial({ map: glowTex, color: 0xfff2c8, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
+      this.sprite = new THREE.Sprite(this.mat);
+      this.sprite.scale.set(1.1, 1.1, 1);
+      this.sprite.position.set(this.x, this.y, this.z);
+      scene.add(this.sprite);
+
+      this.light = new THREE.PointLight(0xffdca8, 2.2, 26);
+      this.light.position.copy(this.sprite.position);
+      scene.add(this.light);
+    }
+    update() {
+      this.vy -= 0.018;
+      this.y += this.vy;
+      this.sprite.position.y = this.y;
+      this.light.position.y = this.y;
+
+      this.tick++;
+      if (this.tick % 2 === 0) trailSparks.push(new TrailSpark(this.x, this.y, this.z));
+
+      if (this.vy <= 0.05 || this.y >= this.targetY) {
+        scene.remove(this.sprite); this.mat.dispose();
+        scene.remove(this.light);
+        bursts.push(new Burst(this.x, this.y, this.z, this.color));
+        return false;
+      }
+      return true;
+    }
+  }
+
+  class TrailSpark {
+    constructor(x, y, z) {
+      this.mat = new THREE.SpriteMaterial({ map: glowTex, color: 0xffcf8f, transparent: true, opacity: 0.75, blending: THREE.AdditiveBlending, depthWrite: false });
+      this.sprite = new THREE.Sprite(this.mat);
+      this.sprite.scale.set(0.5, 0.5, 1);
+      this.sprite.position.set(x, y, z);
+      scene.add(this.sprite);
+      this.life = 1;
+    }
+    update() {
+      this.life -= 0.07;
+      this.mat.opacity = Math.max(this.life * 0.7, 0);
+      this.sprite.position.y -= 0.025;
+      if (this.life <= 0) { scene.remove(this.sprite); this.mat.dispose(); return false; }
+      return true;
+    }
+  }
+
+  class Burst {
+    constructor(x, y, z, colorHex) {
+      const crackle = Math.random() < 0.3;
+      const count = crackle ? 90 : 150;
+      this.colorHex = crackle ? 0xffffff : colorHex;
+      this.seed = Math.random() * 10;
+
+      this.light = new THREE.PointLight(this.colorHex, 9, 110);
+      this.light.position.set(x, y, z);
+      scene.add(this.light);
+
+      this.geometry = new THREE.BufferGeometry();
+      this.positions = new Float32Array(count * 3);
+      this.velocities = [];
+      for (let i = 0; i < count; i++) {
+        this.positions[i * 3] = x;
+        this.positions[i * 3 + 1] = y;
+        this.positions[i * 3 + 2] = z;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(Math.random() * 2 - 1);
+        const speed = (crackle ? Math.random() * 1.5 + 0.6 : Math.random() * 1.05 + 0.35);
+        this.velocities.push({
+          x: Math.sin(phi) * Math.cos(theta) * speed,
+          y: Math.sin(phi) * Math.sin(theta) * speed,
+          z: Math.cos(phi) * speed
         });
+      }
+      this.geometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3));
+      this.material = new THREE.PointsMaterial({
+        color: this.colorHex, map: glowTex, size: crackle ? 1.1 : 1.6,
+        transparent: true, opacity: 1, blending: THREE.AdditiveBlending, depthWrite: false
+      });
+      this.mesh = new THREE.Points(this.geometry, this.material);
+      scene.add(this.mesh);
 
-        function generateLink() {
-            let name = document.getElementById('name-input').value.trim();
-            if(!name) { alert("Please enter a name!"); return; }
-            let baseUrl = window.location.href.split('?')[0];
-            let shareableUrl = `${baseUrl}?name=${encodeURIComponent(name)}`;
-            document.getElementById('generated-url').value = shareableUrl;
-            document.getElementById('link-result').style.display = 'block';
-        }
+      this.life = 1.0;
+      this.decay = crackle ? (Math.random() * 0.02 + 0.02) : (Math.random() * 0.011 + 0.009);
+      this.time = 0;
+    }
+    update() {
+      this.time += 0.06;
+      this.life -= this.decay;
+      const twinkle = 0.75 + 0.25 * Math.sin(this.time * 9 + this.seed);
+      this.material.opacity = Math.max(this.life * twinkle, 0);
+      this.light.intensity = Math.max(this.life * 8 * twinkle, 0);
 
-        function copyLink() {
-            let copyText = document.getElementById('generated-url');
-            copyText.select();
-            document.execCommand("copy");
-            alert("Magic Link Copied! Share with the Birthday Person 🎉");
-        }
+      const pos = this.geometry.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const v = this.velocities[i];
+        v.x *= 0.985; v.z *= 0.985;
+        v.y = v.y * 0.985 - 0.02;
+        pos.setXYZ(i, pos.getX(i) + v.x, pos.getY(i) + v.y, pos.getZ(i) + v.z);
+      }
+      pos.needsUpdate = true;
 
-        // Slow Entrance with Blur, Rotation & Booster Glow -> Switch to Alive Floating
-        function startEntranceSequence() {
-            const w1 = document.getElementById('w1');
-            const w2 = document.getElementById('w2');
-            const w3 = document.getElementById('w3');
-            const orn1 = document.getElementById('orn1');
-            const orn2 = document.getElementById('orn2');
+      if (this.life <= 0) {
+        scene.remove(this.mesh); scene.remove(this.light);
+        this.geometry.dispose(); this.material.dispose();
+        return false;
+      }
+      return true;
+    }
+  }
 
-            setTimeout(() => { w1.classList.add('blur-rotate-fly-1'); }, 300);
-            setTimeout(() => { w2.classList.add('blur-rotate-fly-2'); orn1.style.opacity = '1'; }, 1200);
-            setTimeout(() => { w3.classList.add('blur-rotate-fly-3'); orn2.style.opacity = '1'; }, 2100);
+  setInterval(() => { rockets.push(new Rocket()); }, 650);
 
-            // Forever Alive Transition (Text stays permanently active)
-            setTimeout(() => {
-                w1.className = 'word-container alive-float-1';
-                w2.className = 'word-container alive-float-2';
-                w3.className = 'word-container alive-float-3';
-            }, 4000);
-        }
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
 
-        // --- ASSAM LANDSCAPE ENGINE: STARS, MOUNTAINS, RIVER & MASSIVE ROCKET BOMBS ---
-        function startAssamLandscapeEngine() {
-            let rockets = [];
-            let particles = [];
-            let stars = [];
-            let riverWaveOffset = 0;
+    const wp = wGeo.attributes.position;
+    for (let i = 0; i < wp.count; i++) {
+      const u = wp.getX(i), v = wp.getY(i);
+      wp.setZ(i, Math.sin(u * 0.1 + t * 2) * Math.cos(v * 0.1 + t * 1.5) * 0.8);
+    }
+    wGeo.computeVertexNormals();
+    wp.needsUpdate = true;
 
-            // Twinkling Stars in the Sky
-            for(let i=0; i<180; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * (canvas.height * 0.6),
-                    size: Math.random() * 2.2 + 0.5,
-                    speed: Math.random() * 0.3 + 0.1,
-                    alpha: Math.random()
-                });
-            }
+    rockets = rockets.filter(r => r.update());
+    trailSparks = trailSparks.filter(s => s.update());
+    bursts = bursts.filter(b => b.update());
 
-            // MASSIVE ROCKET BOMB CLASS
-            class MassiveRocket {
-                constructor() {
-                    this.x = Math.random() * (canvas.width * 0.8) + (canvas.width * 0.1);
-                    this.y = canvas.height + 20;
-                    this.targetY = Math.random() * (canvas.height * 0.35) + 50;
-                    this.speed = Math.random() * 4 + 10;
-                    this.size = Math.random() * 3 + 5;
-                    const colors = ['#ffd700', '#ff007f', '#00f2fe', '#ff5500', '#a855f7', '#00ffaa'];
-                    this.color = colors[Math.floor(Math.random() * colors.length)];
-                    this.trail = [];
-                }
-                update() {
-                    this.trail.push({ x: this.x, y: this.y });
-                    if(this.trail.length > 18) this.trail.shift();
-                    this.y -= this.speed;
+    camera.position.x = Math.sin(t * 0.3) * 2;
+    camera.position.y = 15 + Math.cos(t * 0.4) * 1;
+    camera.lookAt(0, 15, 0);
 
-                    if (this.y <= this.targetY) {
-                        triggerMassiveExplosion(this.x, this.y, this.color);
-                        return false;
-                    }
-                    return true;
-                }
-                draw() {
-                    // Booster-like glowing trail
-                    this.trail.forEach((t, index) => {
-                        ctx.save();
-                        ctx.globalAlpha = (index / this.trail.length) * 0.9;
-                        ctx.fillStyle = this.color;
-                        ctx.shadowColor = this.color;
-                        ctx.shadowBlur = 15;
-                        ctx.beginPath();
-                        ctx.arc(t.x, t.y, this.size * (index / this.trail.length), 0, Math.PI * 2);
-                        ctx.fill();
-                        ctx.restore();
-                    });
+    renderer.render(scene, camera);
+  }
+  animate();
 
-                    // Rocket Tip
-                    ctx.save();
-                    ctx.shadowColor = '#ffffff';
-                    ctx.shadowBlur = 25;
-                    ctx.fillStyle = '#ffffff';
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.restore();
-                }
-            }
-
-            // MASSIVE GRAND EXPLOSION PARTICLES
-            class ExplosionParticle {
-                constructor(x, y, color, isCore = false) {
-                    this.x = x; this.y = y; this.color = color;
-                    const angle = Math.random() * Math.PI * 2;
-                    const speed = isCore ? (Math.random() * 5 + 1) : (Math.random() * 12 + 4);
-                    this.vx = Math.cos(angle) * speed;
-                    this.vy = Math.sin(angle) * speed;
-                    this.alpha = 1;
-                    this.decay = Math.random() * 0.012 + 0.006;
-                    this.gravity = 0.05;
-                    this.size = Math.random() * 3.5 + 1.5;
-                }
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    this.vy += this.gravity;
-                    this.vx *= 0.98;
-                    this.vy *= 0.98;
-                    this.alpha -= this.decay;
-                    return this.alpha > 0;
-                }
-                draw() {
-                    ctx.save();
-                    ctx.globalAlpha = this.alpha;
-                    ctx.shadowColor = this.color;
-                    ctx.shadowBlur = 15;
-                    ctx.fillStyle = this.color;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.restore();
-                }
-            }
-
-            function triggerMassiveExplosion(x, y, color) {
-                for (let i = 0; i < 110; i++) {
-                    particles.push(new ExplosionParticle(x, y, color, false));
-                }
-                for (let i = 0; i < 50; i++) {
-                    particles.push(new ExplosionParticle(x, y, '#ffffff', true));
-                }
-            }
-
-            // Continuous Rocket Bombs Launch
-            setInterval(() => { rockets.push(new MassiveRocket()); }, 260);
-
-            // Draw Assam Style Distant Mountains
-            function drawMountains() {
-                // Background Mountain Range 1
-                ctx.fillStyle = '#0b041a';
-                ctx.beginPath();
-                ctx.moveTo(0, canvas.height * 0.65);
-                ctx.lineTo(canvas.width * 0.15, canvas.height * 0.50);
-                ctx.lineTo(canvas.width * 0.35, canvas.height * 0.62);
-                ctx.lineTo(canvas.width * 0.60, canvas.height * 0.45);
-                ctx.lineTo(canvas.width * 0.85, canvas.height * 0.60);
-                ctx.lineTo(canvas.width, canvas.height * 0.52);
-                ctx.lineTo(canvas.width, canvas.height * 0.75);
-                ctx.lineTo(0, canvas.height * 0.75);
-                ctx.closePath();
-                ctx.fill();
-
-                // Foreground Mountain Range 2
-                ctx.fillStyle = '#060210';
-                ctx.beginPath();
-                ctx.moveTo(0, canvas.height * 0.72);
-                ctx.lineTo(canvas.width * 0.25, canvas.height * 0.58);
-                ctx.lineTo(canvas.width * 0.50, canvas.height * 0.70);
-                ctx.lineTo(canvas.width * 0.75, canvas.height * 0.55);
-                ctx.lineTo(canvas.width, canvas.height * 0.68);
-                ctx.lineTo(canvas.width, canvas.height * 0.80);
-                ctx.lineTo(0, canvas.height * 0.80);
-                ctx.closePath();
-                ctx.fill();
-            }
-
-            // Draw Flowing River at the Bottom
-            function drawRiver() {
-                riverWaveOffset += 0.03;
-                let riverGrad = ctx.createLinearGradient(0, canvas.height * 0.78, 0, canvas.height);
-                riverGrad.addColorStop(0, '#001a33');
-                riverGrad.addColorStop(0.5, '#000f22');
-                riverGrad.addColorStop(1, '#000511');
-                
-                ctx.fillStyle = riverGrad;
-                ctx.fillRect(0, canvas.height * 0.78, canvas.width, canvas.height * 0.22);
-
-                // Water shimmering flow lines
-                ctx.strokeStyle = 'rgba(0, 242, 254, 0.35)';
-                ctx.lineWidth = 2;
-                for (let i = 0; i < 6; i++) {
-                    ctx.beginPath();
-                    let yPos = canvas.height * 0.82 + i * (canvas.height * 0.03);
-                    for (let x = 0; x < canvas.width; x += 30) {
-                        let waveY = yPos + Math.sin(x * 0.02 + riverWaveOffset + i) * 4;
-                        if (x === 0) ctx.moveTo(x, waveY);
-                        else ctx.lineTo(x, waveY);
-                    }
-                    ctx.stroke();
-                }
-            }
-
-            function loop() {
-                requestAnimationFrame(loop);
-                
-                ctx.fillStyle = 'rgba(2, 0, 5, 0.25)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                // Draw Stars
-                stars.forEach(s => {
-                    s.y -= s.speed;
-                    if(s.y < 0) s.y = canvas.height * 0.6;
-                    ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(Math.sin(Date.now()*0.002 + s.x))})`;
-                    ctx.fillRect(s.x, s.y, s.size, s.size);
-                });
-
-                // Draw Landscape
-                drawMountains();
-                drawRiver();
-
-                // Update & Render Rockets and Explosions
-                rockets = rockets.filter(r => { r.draw(); return r.update(); });
-                particles = particles.filter(p => { p.draw(); return p.update(); });
-            }
-            loop();
-        }
-    </script>
+  addEventListener('resize', () => {
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+}
+</script>
 </body>
 </html>
